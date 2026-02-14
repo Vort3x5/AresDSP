@@ -1,1 +1,0 @@
-Warning (10268): Verilog HDL information at fft_4096.sv(96): always construct contains both blocking and non-blocking assignments File: C:/Users/jakub/Desktop/SYCYF_verilog/fft_4096.sv Line: 96
