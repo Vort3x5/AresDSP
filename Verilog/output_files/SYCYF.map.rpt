@@ -1,0 +1,410 @@
+Analysis & Synthesis report for SYCYF
+Thu May 29 15:32:00 2025
+Quartus Prime Version 20.1.1 Build 720 11/11/2020 SJ Lite Edition
+
+
+---------------------
+; Table of Contents ;
+---------------------
+  1. Legal Notice
+  2. Analysis & Synthesis Summary
+  3. Analysis & Synthesis Settings
+  4. Parallel Compilation
+  5. Analysis & Synthesis Source Files Read
+  6. Analysis & Synthesis Resource Usage Summary
+  7. Analysis & Synthesis Resource Utilization by Entity
+  8. State Machine - |fft_4096|state
+  9. Registers Removed During Synthesis
+ 10. General Register Statistics
+ 11. Multiplexer Restructuring Statistics (Restructuring Performed)
+ 12. Parameter Settings for User Entity Instance: Top-level Entity: |fft_4096
+ 13. Port Connectivity Checks: "butterfly:bf_inst"
+ 14. Post-Synthesis Netlist Statistics for Top Partition
+ 15. Elapsed Time Per Partition
+ 16. Analysis & Synthesis Messages
+ 17. Analysis & Synthesis Suppressed Messages
+
+
+
+----------------
+; Legal Notice ;
+----------------
+Copyright (C) 2020  Intel Corporation. All rights reserved.
+Your use of Intel Corporation's design tools, logic functions 
+and other software and tools, and any partner logic 
+functions, and any output files from any of the foregoing 
+(including device programming or simulation files), and any 
+associated documentation or information are expressly subject 
+to the terms and conditions of the Intel Program License 
+Subscription Agreement, the Intel Quartus Prime License Agreement,
+the Intel FPGA IP License Agreement, or other applicable license
+agreement, including, without limitation, that your use is for
+the sole purpose of programming logic devices manufactured by
+Intel and sold by Intel or its authorized distributors.  Please
+refer to the applicable agreement for further details, at
+https://fpgasoftware.intel.com/eula.
+
+
+
++----------------------------------------------------------------------------------+
+; Analysis & Synthesis Summary                                                     ;
++------------------------------------+---------------------------------------------+
+; Analysis & Synthesis Status        ; Successful - Thu May 29 15:32:00 2025       ;
+; Quartus Prime Version              ; 20.1.1 Build 720 11/11/2020 SJ Lite Edition ;
+; Revision Name                      ; SYCYF                                       ;
+; Top-level Entity Name              ; fft_4096                                    ;
+; Family                             ; Cyclone IV E                                ;
+; Total logic elements               ; 131                                         ;
+;     Total combinational functions  ; 127                                         ;
+;     Dedicated logic registers      ; 49                                          ;
+; Total registers                    ; 49                                          ;
+; Total pins                         ; 4                                           ;
+; Total virtual pins                 ; 0                                           ;
+; Total memory bits                  ; 0                                           ;
+; Embedded Multiplier 9-bit elements ; 0                                           ;
+; Total PLLs                         ; 0                                           ;
++------------------------------------+---------------------------------------------+
+
+
++------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Settings                                                                              ;
++------------------------------------------------------------------+--------------------+--------------------+
+; Option                                                           ; Setting            ; Default Value      ;
++------------------------------------------------------------------+--------------------+--------------------+
+; Device                                                           ; EP4CE115F29C7      ;                    ;
+; Top-level entity name                                            ; fft_4096           ; SYCYF              ;
+; Family name                                                      ; Cyclone IV E       ; Cyclone V          ;
+; Use smart compilation                                            ; Off                ; Off                ;
+; Enable parallel Assembler and Timing Analyzer during compilation ; On                 ; On                 ;
+; Enable compact report table                                      ; Off                ; Off                ;
+; Restructure Multiplexers                                         ; Auto               ; Auto               ;
+; Create Debugging Nodes for IP Cores                              ; Off                ; Off                ;
+; Preserve fewer node names                                        ; On                 ; On                 ;
+; Intel FPGA IP Evaluation Mode                                    ; Enable             ; Enable             ;
+; Verilog Version                                                  ; Verilog_2001       ; Verilog_2001       ;
+; VHDL Version                                                     ; VHDL_1993          ; VHDL_1993          ;
+; State Machine Processing                                         ; Auto               ; Auto               ;
+; Safe State Machine                                               ; Off                ; Off                ;
+; Extract Verilog State Machines                                   ; On                 ; On                 ;
+; Extract VHDL State Machines                                      ; On                 ; On                 ;
+; Ignore Verilog initial constructs                                ; Off                ; Off                ;
+; Iteration limit for constant Verilog loops                       ; 5000               ; 5000               ;
+; Iteration limit for non-constant Verilog loops                   ; 250                ; 250                ;
+; Add Pass-Through Logic to Inferred RAMs                          ; On                 ; On                 ;
+; Infer RAMs from Raw Logic                                        ; On                 ; On                 ;
+; Parallel Synthesis                                               ; On                 ; On                 ;
+; DSP Block Balancing                                              ; Auto               ; Auto               ;
+; NOT Gate Push-Back                                               ; On                 ; On                 ;
+; Power-Up Don't Care                                              ; On                 ; On                 ;
+; Remove Redundant Logic Cells                                     ; Off                ; Off                ;
+; Remove Duplicate Registers                                       ; On                 ; On                 ;
+; Ignore CARRY Buffers                                             ; Off                ; Off                ;
+; Ignore CASCADE Buffers                                           ; Off                ; Off                ;
+; Ignore GLOBAL Buffers                                            ; Off                ; Off                ;
+; Ignore ROW GLOBAL Buffers                                        ; Off                ; Off                ;
+; Ignore LCELL Buffers                                             ; Off                ; Off                ;
+; Ignore SOFT Buffers                                              ; On                 ; On                 ;
+; Limit AHDL Integers to 32 Bits                                   ; Off                ; Off                ;
+; Optimization Technique                                           ; Balanced           ; Balanced           ;
+; Carry Chain Length                                               ; 70                 ; 70                 ;
+; Auto Carry Chains                                                ; On                 ; On                 ;
+; Auto Open-Drain Pins                                             ; On                 ; On                 ;
+; Perform WYSIWYG Primitive Resynthesis                            ; Off                ; Off                ;
+; Auto ROM Replacement                                             ; On                 ; On                 ;
+; Auto RAM Replacement                                             ; On                 ; On                 ;
+; Auto DSP Block Replacement                                       ; On                 ; On                 ;
+; Auto Shift Register Replacement                                  ; Auto               ; Auto               ;
+; Allow Shift Register Merging across Hierarchies                  ; Auto               ; Auto               ;
+; Auto Clock Enable Replacement                                    ; On                 ; On                 ;
+; Strict RAM Replacement                                           ; Off                ; Off                ;
+; Allow Synchronous Control Signals                                ; On                 ; On                 ;
+; Force Use of Synchronous Clear Signals                           ; Off                ; Off                ;
+; Auto RAM Block Balancing                                         ; On                 ; On                 ;
+; Auto RAM to Logic Cell Conversion                                ; Off                ; Off                ;
+; Auto Resource Sharing                                            ; Off                ; Off                ;
+; Allow Any RAM Size For Recognition                               ; Off                ; Off                ;
+; Allow Any ROM Size For Recognition                               ; Off                ; Off                ;
+; Allow Any Shift Register Size For Recognition                    ; Off                ; Off                ;
+; Use LogicLock Constraints during Resource Balancing              ; On                 ; On                 ;
+; Ignore translate_off and synthesis_off directives                ; Off                ; Off                ;
+; Timing-Driven Synthesis                                          ; On                 ; On                 ;
+; Report Parameter Settings                                        ; On                 ; On                 ;
+; Report Source Assignments                                        ; On                 ; On                 ;
+; Report Connectivity Checks                                       ; On                 ; On                 ;
+; Ignore Maximum Fan-Out Assignments                               ; Off                ; Off                ;
+; Synchronization Register Chain Length                            ; 2                  ; 2                  ;
+; Power Optimization During Synthesis                              ; Normal compilation ; Normal compilation ;
+; HDL message level                                                ; Level2             ; Level2             ;
+; Suppress Register Optimization Related Messages                  ; Off                ; Off                ;
+; Number of Removed Registers Reported in Synthesis Report         ; 5000               ; 5000               ;
+; Number of Swept Nodes Reported in Synthesis Report               ; 5000               ; 5000               ;
+; Number of Inverted Registers Reported in Synthesis Report        ; 100                ; 100                ;
+; Clock MUX Protection                                             ; On                 ; On                 ;
+; Auto Gated Clock Conversion                                      ; Off                ; Off                ;
+; Block Design Naming                                              ; Auto               ; Auto               ;
+; SDC constraint protection                                        ; Off                ; Off                ;
+; Synthesis Effort                                                 ; Auto               ; Auto               ;
+; Shift Register Replacement - Allow Asynchronous Clear Signal     ; On                 ; On                 ;
+; Pre-Mapping Resynthesis Optimization                             ; Off                ; Off                ;
+; Analysis & Synthesis Message Level                               ; Medium             ; Medium             ;
+; Disable Register Merging Across Hierarchies                      ; Auto               ; Auto               ;
+; Resource Aware Inference For Block RAM                           ; On                 ; On                 ;
++------------------------------------------------------------------+--------------------+--------------------+
+
+
++------------------------------------------+
+; Parallel Compilation                     ;
++----------------------------+-------------+
+; Processors                 ; Number      ;
++----------------------------+-------------+
+; Number detected on machine ; 8           ;
+; Maximum allowed            ; 4           ;
+;                            ;             ;
+; Average used               ; 1.00        ;
+; Maximum used               ; 4           ;
+;                            ;             ;
+; Usage by Processor         ; % Time Used ;
+;     Processor 1            ; 100.0%      ;
+;     Processors 2-4         ;   0.0%      ;
++----------------------------+-------------+
+
+
++---------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Source Files Read                                                                                                            ;
++----------------------------------+-----------------+------------------------------+-----------------------------------------------------+---------+
+; File Name with User-Entered Path ; Used in Netlist ; File Type                    ; File Name with Absolute Path                        ; Library ;
++----------------------------------+-----------------+------------------------------+-----------------------------------------------------+---------+
+; twiddle_rom.sv                   ; yes             ; User SystemVerilog HDL File  ; C:/Users/jakub/Desktop/SYCYF_verilog/twiddle_rom.sv ;         ;
+; rom_input.sv                     ; yes             ; User SystemVerilog HDL File  ; C:/Users/jakub/Desktop/SYCYF_verilog/rom_input.sv   ;         ;
+; ram_4096.sv                      ; yes             ; User SystemVerilog HDL File  ; C:/Users/jakub/Desktop/SYCYF_verilog/ram_4096.sv    ;         ;
+; fft_4096.sv                      ; yes             ; User SystemVerilog HDL File  ; C:/Users/jakub/Desktop/SYCYF_verilog/fft_4096.sv    ;         ;
+; butterfly.sv                     ; yes             ; User SystemVerilog HDL File  ; C:/Users/jakub/Desktop/SYCYF_verilog/butterfly.sv   ;         ;
++----------------------------------+-----------------+------------------------------+-----------------------------------------------------+---------+
+
+
++---------------------------------------------------------+
+; Analysis & Synthesis Resource Usage Summary             ;
++---------------------------------------------+-----------+
+; Resource                                    ; Usage     ;
++---------------------------------------------+-----------+
+; Estimated Total logic elements              ; 131       ;
+;                                             ;           ;
+; Total combinational functions               ; 127       ;
+; Logic element usage by number of LUT inputs ;           ;
+;     -- 4 input functions                    ; 23        ;
+;     -- 3 input functions                    ; 60        ;
+;     -- <=2 input functions                  ; 44        ;
+;                                             ;           ;
+; Logic elements by mode                      ;           ;
+;     -- normal mode                          ; 46        ;
+;     -- arithmetic mode                      ; 81        ;
+;                                             ;           ;
+; Total registers                             ; 49        ;
+;     -- Dedicated logic registers            ; 49        ;
+;     -- I/O registers                        ; 0         ;
+;                                             ;           ;
+; I/O pins                                    ; 4         ;
+;                                             ;           ;
+; Embedded Multiplier 9-bit elements          ; 0         ;
+;                                             ;           ;
+; Maximum fan-out node                        ; clk~input ;
+; Maximum fan-out                             ; 49        ;
+; Total fan-out                               ; 578       ;
+; Average fan-out                             ; 3.14      ;
++---------------------------------------------+-----------+
+
+
++----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+; Analysis & Synthesis Resource Utilization by Entity                                                                                                                                                      ;
++----------------------------+---------------------+---------------------------+-------------+--------------+---------+-----------+------+--------------+---------------------+-------------+--------------+
+; Compilation Hierarchy Node ; Combinational ALUTs ; Dedicated Logic Registers ; Memory Bits ; DSP Elements ; DSP 9x9 ; DSP 18x18 ; Pins ; Virtual Pins ; Full Hierarchy Name ; Entity Name ; Library Name ;
++----------------------------+---------------------+---------------------------+-------------+--------------+---------+-----------+------+--------------+---------------------+-------------+--------------+
+; |fft_4096                  ; 127 (127)           ; 49 (49)                   ; 0           ; 0            ; 0       ; 0         ; 4    ; 0            ; |fft_4096           ; fft_4096    ; work         ;
++----------------------------+---------------------+---------------------------+-------------+--------------+---------+-----------+------+--------------+---------------------+-------------+--------------+
+Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
+
+
+Encoding Type:  One-Hot
++-------------------------------------------------------------------------------------------------------------------------------------------------------+
+; State Machine - |fft_4096|state                                                                                                                       ;
++------------------+------------------+-----------------+-----------------+-----------------+----------------+----------------+------------+------------+
+; Name             ; state.DONE_STATE ; state.FFT_WRITE ; state.FFT_CALC2 ; state.FFT_CALC1 ; state.FFT_WAIT ; state.FFT_READ ; state.LOAD ; state.IDLE ;
++------------------+------------------+-----------------+-----------------+-----------------+----------------+----------------+------------+------------+
+; state.IDLE       ; 0                ; 0               ; 0               ; 0               ; 0              ; 0              ; 0          ; 0          ;
+; state.LOAD       ; 0                ; 0               ; 0               ; 0               ; 0              ; 0              ; 1          ; 1          ;
+; state.FFT_READ   ; 0                ; 0               ; 0               ; 0               ; 0              ; 1              ; 0          ; 1          ;
+; state.FFT_WAIT   ; 0                ; 0               ; 0               ; 0               ; 1              ; 0              ; 0          ; 1          ;
+; state.FFT_CALC1  ; 0                ; 0               ; 0               ; 1               ; 0              ; 0              ; 0          ; 1          ;
+; state.FFT_CALC2  ; 0                ; 0               ; 1               ; 0               ; 0              ; 0              ; 0          ; 1          ;
+; state.FFT_WRITE  ; 0                ; 1               ; 0               ; 0               ; 0              ; 0              ; 0          ; 1          ;
+; state.DONE_STATE ; 1                ; 0               ; 0               ; 0               ; 0              ; 0              ; 0          ; 1          ;
++------------------+------------------+-----------------+-----------------+-----------------+----------------+----------------+------------+------------+
+
+
++------------------------------------------------------------+
+; Registers Removed During Synthesis                         ;
++---------------------------------------+--------------------+
+; Register name                         ; Reason for Removal ;
++---------------------------------------+--------------------+
+; state~12                              ; Lost fanout        ;
+; state~13                              ; Lost fanout        ;
+; state~14                              ; Lost fanout        ;
+; Total Number of Removed Registers = 3 ;                    ;
++---------------------------------------+--------------------+
+
+
++------------------------------------------------------+
+; General Register Statistics                          ;
++----------------------------------------------+-------+
+; Statistic                                    ; Value ;
++----------------------------------------------+-------+
+; Total registers                              ; 49    ;
+; Number of registers using Synchronous Clear  ; 36    ;
+; Number of registers using Synchronous Load   ; 0     ;
+; Number of registers using Asynchronous Clear ; 49    ;
+; Number of registers using Asynchronous Load  ; 0     ;
+; Number of registers using Clock Enable       ; 38    ;
+; Number of registers using Preset             ; 0     ;
++----------------------------------------------+-------+
+
+
++------------------------------------------------------------------------------------------------------------------------------------------+
+; Multiplexer Restructuring Statistics (Restructuring Performed)                                                                           ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+----------------------------+
+; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+----------------------------+
+; 4:1                ; 12 bits   ; 24 LEs        ; 12 LEs               ; 12 LEs                 ; Yes        ; |fft_4096|load_count[9]    ;
+; 5:1                ; 4 bits    ; 12 LEs        ; 4 LEs                ; 8 LEs                  ; Yes        ; |fft_4096|stage[2]         ;
+; 5:1                ; 12 bits   ; 36 LEs        ; 12 LEs               ; 24 LEs                 ; Yes        ; |fft_4096|k_count[10]      ;
+; 6:1                ; 12 bits   ; 48 LEs        ; 12 LEs               ; 36 LEs                 ; Yes        ; |fft_4096|group_count[4]   ;
+; 3:1                ; 4 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; No         ; |fft_4096|ShiftLeft0       ;
+; 3:1                ; 5 bits    ; 10 LEs        ; 5 LEs                ; 5 LEs                  ; No         ; |fft_4096|ShiftRight0      ;
+; 3:1                ; 5 bits    ; 10 LEs        ; 5 LEs                ; 5 LEs                  ; No         ; |fft_4096|ShiftRight0      ;
+; 4:1                ; 3 bits    ; 6 LEs         ; 3 LEs                ; 3 LEs                  ; No         ; |fft_4096|ShiftRight0      ;
++--------------------+-----------+---------------+----------------------+------------------------+------------+----------------------------+
+
+
++--------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: Top-level Entity: |fft_4096 ;
++----------------+-------+-------------------------------------------------+
+; Parameter Name ; Value ; Type                                            ;
++----------------+-------+-------------------------------------------------+
+; IDLE           ; 000   ; Unsigned Binary                                 ;
+; LOAD           ; 001   ; Unsigned Binary                                 ;
+; FFT_READ       ; 010   ; Unsigned Binary                                 ;
+; FFT_WAIT       ; 011   ; Unsigned Binary                                 ;
+; FFT_CALC1      ; 100   ; Unsigned Binary                                 ;
+; FFT_CALC2      ; 101   ; Unsigned Binary                                 ;
+; FFT_WRITE      ; 110   ; Unsigned Binary                                 ;
+; DONE_STATE     ; 111   ; Unsigned Binary                                 ;
++----------------+-------+-------------------------------------------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
+
+
++---------------------------------------------------------------------------------------------------------------------+
+; Port Connectivity Checks: "butterfly:bf_inst"                                                                       ;
++-----------+--------+----------+-------------------------------------------------------------------------------------+
+; Port      ; Type   ; Severity ; Details                                                                             ;
++-----------+--------+----------+-------------------------------------------------------------------------------------+
+; out0_r[0] ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; out0_i[0] ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; out1_r[0] ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
+; out1_i[0] ; Output ; Info     ; Connected to dangling logic. Logic that only feeds a dangling port will be removed. ;
++-----------+--------+----------+-------------------------------------------------------------------------------------+
+
+
++-----------------------------------------------------+
+; Post-Synthesis Netlist Statistics for Top Partition ;
++-----------------------+-----------------------------+
+; Type                  ; Count                       ;
++-----------------------+-----------------------------+
+; boundary_port         ; 4                           ;
+; cycloneiii_ff         ; 49                          ;
+;     CLR               ; 11                          ;
+;     ENA CLR           ; 2                           ;
+;     ENA CLR SCLR      ; 36                          ;
+; cycloneiii_lcell_comb ; 127                         ;
+;     arith             ; 81                          ;
+;         1 data inputs ; 1                           ;
+;         2 data inputs ; 33                          ;
+;         3 data inputs ; 47                          ;
+;     normal            ; 46                          ;
+;         0 data inputs ; 2                           ;
+;         1 data inputs ; 3                           ;
+;         2 data inputs ; 5                           ;
+;         3 data inputs ; 13                          ;
+;         4 data inputs ; 23                          ;
+;                       ;                             ;
+; Max LUT depth         ; 7.10                        ;
+; Average LUT depth     ; 4.49                        ;
++-----------------------+-----------------------------+
+
+
++-------------------------------+
+; Elapsed Time Per Partition    ;
++----------------+--------------+
+; Partition Name ; Elapsed Time ;
++----------------+--------------+
+; Top            ; 00:00:00     ;
++----------------+--------------+
+
+
++-------------------------------+
+; Analysis & Synthesis Messages ;
++-------------------------------+
+Info: *******************************************************************
+Info: Running Quartus Prime Analysis & Synthesis
+    Info: Version 20.1.1 Build 720 11/11/2020 SJ Lite Edition
+    Info: Processing started: Thu May 29 15:31:32 2025
+Info: Command: quartus_map --read_settings_files=on --write_settings_files=off SYCYF -c SYCYF
+Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
+Info (20030): Parallel compilation is enabled and will use 4 of the 4 processors detected
+Info (12021): Found 1 design units, including 1 entities, in source file twiddle_rom.sv
+    Info (12023): Found entity 1: twiddle_rom File: C:/Users/jakub/Desktop/SYCYF_verilog/twiddle_rom.sv Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file rom_input.sv
+    Info (12023): Found entity 1: rom_input File: C:/Users/jakub/Desktop/SYCYF_verilog/rom_input.sv Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file ram_4096.sv
+    Info (12023): Found entity 1: ram_4096 File: C:/Users/jakub/Desktop/SYCYF_verilog/ram_4096.sv Line: 2
+Info (12021): Found 1 design units, including 1 entities, in source file fft_tb.sv
+    Info (12023): Found entity 1: fft_tb File: C:/Users/jakub/Desktop/SYCYF_verilog/fft_tb.sv Line: 2
+Info (12021): Found 1 design units, including 1 entities, in source file fft_4096.sv
+    Info (12023): Found entity 1: fft_4096 File: C:/Users/jakub/Desktop/SYCYF_verilog/fft_4096.sv Line: 1
+Info (12021): Found 1 design units, including 1 entities, in source file butterfly.sv
+    Info (12023): Found entity 1: butterfly File: C:/Users/jakub/Desktop/SYCYF_verilog/butterfly.sv Line: 1
+Info (12127): Elaborating entity "fft_4096" for the top level hierarchy
+Warning (10230): Verilog HDL assignment warning at fft_4096.sv(60): truncated value with size 32 to match size of target (12) File: C:/Users/jakub/Desktop/SYCYF_verilog/fft_4096.sv Line: 60
+Warning (10230): Verilog HDL assignment warning at fft_4096.sv(63): truncated value with size 32 to match size of target (12) File: C:/Users/jakub/Desktop/SYCYF_verilog/fft_4096.sv Line: 63
+Warning (10230): Verilog HDL assignment warning at fft_4096.sv(137): truncated value with size 32 to match size of target (12) File: C:/Users/jakub/Desktop/SYCYF_verilog/fft_4096.sv Line: 137
+Warning (10230): Verilog HDL assignment warning at fft_4096.sv(139): truncated value with size 32 to match size of target (12) File: C:/Users/jakub/Desktop/SYCYF_verilog/fft_4096.sv Line: 139
+Warning (10230): Verilog HDL assignment warning at fft_4096.sv(144): truncated value with size 32 to match size of target (12) File: C:/Users/jakub/Desktop/SYCYF_verilog/fft_4096.sv Line: 144
+Warning (10230): Verilog HDL assignment warning at fft_4096.sv(207): truncated value with size 32 to match size of target (12) File: C:/Users/jakub/Desktop/SYCYF_verilog/fft_4096.sv Line: 207
+Warning (10230): Verilog HDL assignment warning at fft_4096.sv(213): truncated value with size 32 to match size of target (12) File: C:/Users/jakub/Desktop/SYCYF_verilog/fft_4096.sv Line: 213
+Warning (10230): Verilog HDL assignment warning at fft_4096.sv(219): truncated value with size 32 to match size of target (4) File: C:/Users/jakub/Desktop/SYCYF_verilog/fft_4096.sv Line: 219
+Info (12128): Elaborating entity "rom_input" for hierarchy "rom_input:rom_inst" File: C:/Users/jakub/Desktop/SYCYF_verilog/fft_4096.sv Line: 27
+Info (12128): Elaborating entity "twiddle_rom" for hierarchy "twiddle_rom:tw_inst" File: C:/Users/jakub/Desktop/SYCYF_verilog/fft_4096.sv Line: 28
+Info (12128): Elaborating entity "ram_4096" for hierarchy "ram_4096:ram_inst" File: C:/Users/jakub/Desktop/SYCYF_verilog/fft_4096.sv Line: 43
+Info (12128): Elaborating entity "butterfly" for hierarchy "butterfly:bf_inst" File: C:/Users/jakub/Desktop/SYCYF_verilog/fft_4096.sv Line: 248
+Warning (10230): Verilog HDL assignment warning at butterfly.sv(14): truncated value with size 32 to match size of target (16) File: C:/Users/jakub/Desktop/SYCYF_verilog/butterfly.sv Line: 14
+Warning (10230): Verilog HDL assignment warning at butterfly.sv(15): truncated value with size 32 to match size of target (16) File: C:/Users/jakub/Desktop/SYCYF_verilog/butterfly.sv Line: 15
+Info (286030): Timing-Driven Synthesis is running
+Info (17049): 3 registers lost all their fanouts during netlist optimizations.
+Info (144001): Generated suppressed messages file C:/Users/jakub/Desktop/SYCYF_verilog/output_files/SYCYF.map.smsg
+Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
+    Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
+Info (21057): Implemented 136 device resources after synthesis - the final resource count might be different
+    Info (21058): Implemented 3 input pins
+    Info (21059): Implemented 1 output pins
+    Info (21061): Implemented 132 logic cells
+Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 11 warnings
+    Info: Peak virtual memory: 5280 megabytes
+    Info: Processing ended: Thu May 29 15:32:00 2025
+    Info: Elapsed time: 00:00:28
+    Info: Total CPU time (on all processors): 00:00:37
+
+
++------------------------------------------+
+; Analysis & Synthesis Suppressed Messages ;
++------------------------------------------+
+The suppressed messages can be found in C:/Users/jakub/Desktop/SYCYF_verilog/output_files/SYCYF.map.smsg.
+
+

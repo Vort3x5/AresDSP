@@ -1,0 +1,11 @@
+
+State Machine - |fft_4096|state
+Name state.DONE_STATE state.FFT_WRITE state.FFT_CALC2 state.FFT_CALC1 state.FFT_WAIT state.FFT_READ state.LOAD state.IDLE 
+state.IDLE 0 0 0 0 0 0 0 0 
+state.LOAD 0 0 0 0 0 0 1 1 
+state.FFT_READ 0 0 0 0 0 1 0 1 
+state.FFT_WAIT 0 0 0 0 1 0 0 1 
+state.FFT_CALC1 0 0 0 1 0 0 0 1 
+state.FFT_CALC2 0 0 1 0 0 0 0 1 
+state.FFT_WRITE 0 1 0 0 0 0 0 1 
+state.DONE_STATE 1 0 0 0 0 0 0 1 

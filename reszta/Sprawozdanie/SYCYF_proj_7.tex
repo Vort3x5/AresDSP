@@ -1,0 +1,1581 @@
+%styl klasy z Polskimi Normami oprac. Marcin Wolinski
+\documentclass[a4paper,titleauthor]{mwart} 
+
+\usepackage{polski}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx} %pakiet do wstawiania grafiki
+\usepackage[hyphens]{url} %pakiet do wstawiania linkow
+%\usepackage[hidelinks,breaklinks]{hyperref}
+\usepackage{authblk}%pakiet do tworzenia afiliacji
+\usepackage{tabularx}%pakiet do tabel
+\usepackage[a4paper, left=2cm, right=2cm, top=3cm, bottom=3cm]{geometry}
+\usepackage{listings}
+\usepackage{placeins}%pakiet do kontroli umieszczania obiektow
+\usepackage{hyperref}%pakiet do m.in. kolorowania linkow
+\usepackage[]{xcolor}
+\usepackage{float}
+\usepackage{minted}
+
+
+\usepackage[tablegrid,owncaptions]{vhistory}
+\renewcommand{\vhhistoryname}{Historia zmian}
+\renewcommand{\vhversionname}{Wersja}
+\renewcommand{\vhdatename}   {Data}
+\renewcommand{\vhauthorname} {Autor}
+\renewcommand{\vhchangename} {Opis zmian}
+
+\renewcommand\figurename{Rys.}%skrocony podpis
+\renewcommand\lstlistingname{Wydruk}
+
+
+%------------------------------------------------------------------------
+% Dane do strony tytułowej
+
+\title{{\Huge  Projekt Systemy Cyfrowe}\\ - \\{\Large Zespół nr 7}\\ }
+
+\author{Szymon Boniuk \and Adam Witczak \and Piotr Świtaj \and Jakub Celiński \and Bartosz Skrzypczak}
+
+\affil{Politechnika Warszawska, Wydział EiTI}
+\date{\today}
+
+%------------------------------------------------------------------------
+% Początek dokumentu
+\begin{document}
+	
+	%Automatycznie generowany tytuł dokumentu
+	\maketitle
+	
+	%------------------------------------------------------------------------
+	% Historia zmian
+	\begin{versionhistory}
+		\vhEntry{1.0}{10.03.2025}{SB, AW, PŚ, JC, BS}{Pierwsza wersja raportu Etapu 1}
+		\vhEntry{1.1}{10.03.2025}{SB, AW, PŚ, JC, BS}{Dodano informacje, czym jest Design Thinking}
+		\vhEntry{1.2}{10.03.2025}{SB, AW, PŚ, JC, BS}{Ustalono sposób zarządzania projektem}
+		\vhEntry{1.3}{10.03.2025}{SB, AW, PŚ, JC, BS}{Ustalono zbiór narzędzi niezbędnych do wykonania projektu}
+		\vhEntry{1.4}{11.03.2025}{SB, AW, PŚ, JC, BS}{Wstępne spotkanie projektowe}
+		\vhEntry{1.5}{20.03.2025}{SB, AW, PŚ, JC, BS}{Wprowadzenie korekt na postawie uwag koordynatora projektu}
+		\vhEntry{1.6}{01.04.2025}{SB, AW, PŚ, JC, BS}{Wstępna realizacja etapu II projektu}
+		\vhEntry{1.7}{02.04.2025}{SB, AW, PŚ, JC, BS}{Poprawki w realizacji etapu II projektu}
+		\vhEntry{1.8}{22.04.2025}{SB, AW, PŚ, JC, BS}{Realizacja etapu III zadania projektowego}
+            \vhEntry{1.9}{17.05.2025}{SB, AW, PŚ, JC, BS}{Realizacja etapu IV zadania projektowego}
+            \vhEntry{1.10}{07.06.2025}{SB, AW, PŚ, JC, BS}{Realizacja etapu V zadania projektowego}
+		
+	\end{versionhistory}
+	
+	%------------------------------------------------------------------------
+	% Automatycznie generowany spis treści
+	\newpage
+	\tableofcontents
+	
+	%------------------------------------------------------------------------
+	\newpage
+	\section{Wstęp}
+	\label{sec:wstep}%etykieta
+	
+	\subsection{Cel projektu}
+	Celem projektu jest zaprojektowanie i realizacja systemu sprzętowo-programowego, który pozwoli w jak najkrótszym czasie i jak najdokładniej przebadać próbkę sygnału odebranego z łazika marsjańskiego w celu wykrycia zakresu fal, na których odbywa się potencjalna transmisja. 
+	
+	\subsection{Etapy realizacji}
+	Niniejszy raport będzie w sposób przyrostowy dokumentował realizację projektu związanego z przedmiotem Systemy Cyfrowe w semestrze 25L. Poszczególne etapy realizacji projektu obejmują: 
+	
+	\renewcommand{\labelenumi}{\Roman{enumi}}
+	\begin{enumerate}\setlength{\itemsep}{0.2\baselineskip} 
+		\item Etap wstępny – stworzenie zespołu i organizacja warsztatu pracy, 
+		\item Etap zdobywania informacji – analiza literatury, istniejących metod, zebranie wiedzy teoretycznej związanej z tematem projektu, 
+		\item Etap opracowania koncepcji – szukanie rozwiązań, najlepiej sprawdzi się proces burzy mózgów (mapy myśli), opracowanie koncepcji rozwiązania  na podstawie zdobytej wiedzy, opracowanie prostego modelu referencyjnego (Python, MATLAB/GNU Octave, itp) i danych do testowania  
+		\item Etap implementacji – na tym etapie rozwijamy i rozbudowujemy koncepcje projektowe docelowego systemu, modelujemy elementy systemu w HDL, weryfikujemy funkcjonalnie, integrujemy i oceniamy prototypy, 
+		\item Etap uruchomienia – wdrożenie projektu, uruchomienie na docelowej platformie, przetestowanie według wcześniej opracowanych scenariuszy testowych. 
+	\end{enumerate}
+	
+	
+	
+	%------------------------------------------------------------------------
+	\section{Organizacja prac}
+	\label{sec:organizacja}
+	
+	Prace nad projektem będą przebiegały według metody projektowej "Design Thinking" opisanej w rozdziale 2.1.
+	
+	Zostało zorganizowane spotkanie członków grupy mające na celu dokładne zapoznanie z założeniami oraz wstępny podział obowiązków. Zostały rozdzielone również role w zespole.
+	
+	Każdy z uczestników projektu wyjściowo powinien wykonać około 20 \% pracy w trakcie każdego z etapów.
+	
+	\subsection{Design Thinking}
+	\label{sec:design_thinking}
+	
+	Design Thinking \cite{WikiDesign} \cite{PDFDesign} to iteracyjna metoda rozwiązywania problemów, która koncentruje się na użytkowniku i jego potrzebach. Jest to proces kreatywnego myślenia, który łączy analityczne podejście z intuicją projektową, umożliwiając generowanie innowacyjnych rozwiązań.\\
+	
+	Głównymi etapami Design Thinking są:\\
+	
+	\textbf{1. Empatyzacja (Empathize)}
+	
+	Polega na dogłębnym zrozumieniu potrzeb użytkowników.
+	Wymaga prowadzenia badań, obserwacji i rozmów z użytkownikami, aby poznać ich oczekiwania, problemy i motywacje.
+	Wykorzystuje techniki takie jak wywiady, mapy empatii czy shadowing (obserwacja użytkownika w naturalnym środowisku).\\
+	
+	\textbf{2. Definiowanie problemu (Define)}
+	
+	Po zebraniu informacji z etapu empatyzacji, formułuje się konkretną definicję problemu. Umożliwia to precyzyjne określenie wyzwania, na które należy znaleźć rozwiązanie. W tym etapie pomocne są techniki, takie jak analiza przyczynowo-skutkowa czy budowanie person użytkowników.\\
+	
+	\textbf{3. Generowanie pomysłów (Ideate)}
+	
+	Proces twórczy, w którym uczestnicy generują jak najwięcej możliwych rozwiązań.
+	Ważne jest myślenie nieszablonowe i odrzucenie ograniczeń.
+	Techniki wykorzystywane na tym etapie to m.in. burza mózgów, SCAMPER (modyfikowanie istniejących pomysłów), mapowanie myśli czy metoda 6 kapeluszy myślowych de Bono.\\
+	
+	\textbf{4. Prototypowanie (Prototype)}
+	
+	Polega na tworzeniu uproszczonych wersji rozwiązań, które można szybko testować i modyfikować.
+	Prototypy mogą mieć różne formy, np. rysunki, makiety, modele 3D czy wersje testowe oprogramowania.
+	Celem jest szybkie wykrycie ewentualnych błędów i wprowadzenie poprawek na wczesnym etapie.\\
+	
+	\textbf{5. Testowanie (Test)}
+	
+	Sprawdzenie, jak użytkownicy reagują na stworzone rozwiązania.
+	Umożliwia iteracyjne dopracowanie produktu na podstawie rzeczywistych opinii użytkowników.
+	Testowanie może obejmować wywiady, obserwacje bądź analizę danych użytkowników.
+	
+	\subsection{Zarządzanie projektem}
+	\label{sec:zarządzanie_projektem}
+	Istnieje wiele technik zarządzania projektem \cite{Metodyki}. Oto kilka z nich:
+	\begin{itemize}
+		\item 1. "PRINCE2" - metodyka zarządzania projektami skupiająca się na produktach. Podczas jej realizacji wykorzystuje się doświadczenie specjalistów, którym następnie przypisuje się konkretne obowiązki. Cały proces koncentruje się na tworzonym produkcie, co sprawia, że jest to metoda przejrzysta, stosunkowo prosta i ułatwiająca pracę zespołową. Wśród jej zalet wymienia się dokładność i konieczność tworzenia sumiennej, ustandaryzowanej dokumentacji,
+		\item 2. Klasyczna - "Waterfall",
+		\item 3. "SCRUM" - wspiera zespół w ustrukturyzowanej pracy za pomocą zestawu wartości i konkretnych zasad, ostatecznie doprowadzając do kreatywnego tworzenia jakościowych wyrobów,
+		\item 4. "LEAN" - zakłada dostarczanie produktów w jak najszybszy i najprostszy sposób poprzez położenie nacisku na działania, które dodają wartość do procesu, eliminując marnotrawstwo,
+		\item \textbf{5. Design Thinking - Double Diamond,}
+		
+	\end{itemize}
+	\medskip
+	W celu realizacji projektu została wybrana dokładnie metoda \textbf{"Double Diamond"} \cite{BlogDesign}.
+	\begin{figure}[h]
+		\centering
+		\includegraphics[scale = 0.5]{DoubleDiamond.jpg}
+		\caption{Design Thinking - Double Diamond, grafika przedstawiająca schemat działania metody \cite{BlogDesign}}
+		\label{fig:Design Thinking - Double Diamond, grafika przedstawiająca schemat działania metody}
+	\end{figure}
+	
+	Proces działania tej metody wygląda następująco:\\
+	\begin{itemize}
+		\item \textbf{Discover} - pierwszy etap - odkrywanie potrzeb klienta bądź użytkowników, założeń projektowych, zbieranie informacji z wielu źródeł,
+		\item \textbf{Define} - drugi etap - analiza zebranych danych, definiowanie proponowanego sposobu rozwiązania problemu, precyzowanie rozwiązania,
+		\item \textbf{Develop} - trzeci etap - generowanie pomysłów na rozwiązanie problemu,
+		\item \textbf{Deliver} - czwarty etap - wybór jednego z pomysłów i jego realizacja, dostarczanie prototypu i testy. Ostatecznie - dostarczenie końcowego rozwiązania.
+	\end{itemize}
+	
+	
+	\subsubsection{Narzędzia}
+	\label{sec:narzędzia}
+	* Lista narzędzi niezbędnych w projekcie może ulec zmianie wraz realizacją kolejnych etapów
+	
+	\begin{itemize}
+		\item \textbf{GitHub} - zamieszczanie, wersjonowanie, aktualizacja kodu źródłowego programu realizowanego w ramach projektu,
+		\item \textbf{TeXstudio} - generowanie raportu z poszczególnych etapów projektowych,
+		\item \textbf{Google Scholar} - prace naukowe, artykuły pomocne w realizacji zadania
+		\item \textbf{Środowisko programistyczne Pycharm} (język Python),
+		\item \textbf{Discord} - platforma posłuży do komunikacji oraz wymiany informacji z członkami zespołu,
+		\item \textbf{Matlab} - obliczenia numeryczne i symboliczne
+		\item \textbf{Quartus Prime Lite} - projektowanie w języku Verilog
+		\item \textbf{ModelSim} - testowanie, symulacja gotowego kodu źródłowego przed uruchomieniem na płytce FPGA
+	\end{itemize}
+	
+	%------------------------------------------------------------------------
+	\section{Informacje podstawowe}
+	\label{sec:informacje_podstawowe}
+	Obecnie przetwarzanie i analiza sygnałów radiowych są kluczowe w działaniu wielu technologii:
+	
+	\begin{itemize}
+		\item \textbf{GSM} -  w sieciach 5G stosuje się "massive MIMO" (Multiple Input Multiple Output), wymagające zaawansowanego przetwarzania sygnałów w czasie rzeczywistym,
+		\item \textbf{Radiolokacja} - radary lotnicze, wojskowe, meteorologiczne
+		\item \textbf{Radioastronomia i badania kosmosu} - radioteleskopy i sondy kosmiczne
+	\end{itemize}
+	
+	We wszystkich wspomnianych technologiach wymagana jest również korekcja błędów, która nie może być zrealizowana bez analizy sygnału. Szczególnie uwidacznia się to w technologii GSM. Jeśli urządzenie oddala się od stacji nadawczej, jakość przetwarzanego sygnału spada, zatem urządzenie zwiększa moc nadawania lub łączy się z inną anteną nadawczą. Taka operacja wymaga analizy i przetworzenia sygnału oraz danych odebranych. 
+	
+	Celem tego projektu również jest przetworzenie pewnego sygnału.
+	
+	\subsection{Istniejące rozwiązania}
+	Istnieje wiele różnych metod i programów służących do przetwarzania sygnałów:
+	
+	\begin{itemize}
+		\item \textbf{SDR} (Software-Defined Radio) \cite{SDR} - programy i urządzenia tego typu pozwalają na przetwarzanie odebranych sygnałów, w szerokim zakresie częstotliwości, w czasie rzeczywistym z wykorzystaniem wielu różnych technik modulacji. 
+		
+		Przykładowy program pozwalający na obsługę urządzeń typu SDR:
+		\begin{itemize}
+			\item \textbf{HDSDR} \cite{HDSDR} - Program umożliwia zarówno analizę sygnału pochodzącego z odbiornika w czasie rzeczywistym, ale również nagranych uprzednio w formacie .wav,
+			
+		\end{itemize}
+		\item \textbf{GNU Radio} \cite{GNURadio} - Program ma funkcjonalność podobną do HDSDR, jednak proces przetwarzania można zdefiniować samodzielnie przy pomocy bloków. Program jest szeroko stosowany przez hobbystów, środowiska akademickie i komercyjne, wspierając zarówno badania nad komunikacją bezprzewodową, jak i rzeczywiste systemy radiowe.
+		\item \textbf{Audacity} \cite{Audacity} - Program pozwalający na zaawansowaną analizę i modyfikację ścieżek dźwiękowych. Umożliwia analizę przy pomocy spektrogramów oraz nakładanie filtrów.
+		\item \textbf{Paczka narzędzi "Signal Processing Toolbox" do programu MATLAB} \cite{MatlabSignal} - Dostarcza funkcje oraz aplikacje do zarządzania, analizy, wstępnego przetwarzania i ekstrakcji cech z sygnałów próbkowanych równomiernie i nierównomiernie. Toolbox obejmuje narzędzia do projektowania i analizy filtrów, zmiany częstotliwości próbkowania, wygładzania, usuwania trendów oraz estymacji widma mocy. Można skorzystać z aplikacji Analizator Sygnałów do wizualizacji i przetwarzania sygnałów jednocześnie w dziedzinie czasu, częstotliwości oraz czasu-częstotliwości. Toolbox pozwala również na projektowanie własnych filtrów.
+		\item \textbf{Baza przykładów Transformat Fouriera (GitHub)} \cite{FourierGithub} - zawiera przykładowe implementacje transformat Fouriera (w szczególności FFT) napisanych w języku Python
+		\item \textbf{Biblioteki dla języka Python wspomagające przetwarzanie sygnałów:}
+		\begin{itemize}
+			\item \textbf{SciPy} \cite{SciPy} - SciPy to otwarte oprogramowanie do zastosowań matematycznych, naukowych i inżynierskich. Zawiera moduły do statystyki, optymalizacji, całkowania numerycznego, algebry liniowej, transformat Fouriera, przetwarzania sygnałów i obrazów, rozwiązywania równań różniczkowych zwyczajnych (ODE), oraz wiele innych funkcjonalności.
+			\item \textbf{NumPy} \cite{NumPy} - biblioteka Pythona służąca do pracy z tablicami. Oferuje również funkcje do obliczeń w zakresie: algebry liniowej, transformat Fouriera, operacji na macierzach.
+			\item \textbf{Matplotlib} \cite{Matplotlib} - popularna biblioteka do wizualizacji danych w Pythonie. Często wykorzystywana do tworzenia: statycznych wykresów, interaktywnych wizualizacji, animowanych prezentacji danych. Dzięki Matplotlib można w kilku linijkach kodu generować: wykresy liniowe i słupkowe, histogramy, diagramy punktowe (scatter plots). Jest przydatna do wizualizacji wyniku działania programu, który wyświetla końcowe wyniki działań programów (np. po skończonej analizie sygnału w postaci wykresu mocy i zakresu częstotliwości).
+		\end{itemize}
+		
+	\end{itemize}
+	
+	\subsection{Podstawy przetwarzania sygnałów}
+	Podstawą wszelkiego przetwarzania, analizy sygnałów jest transformata Fouriera \cite{Fouriersvantec} \cite{DSPOppenheim} oraz różne jej modyfikacje.
+	
+	\subsubsection{Jak działa transformata Fouriera?}
+	\textbf{Transformata Fouriera} \cite{Fouriersvantec} rozkłada przebieg na sumę sinusoid o różnych częstotliwościach. Oznacza to, że transformata Fouriera reprezentuje te same informacje, co oryginalny kształt fali, tylko w dziedzinie częstotliwości (w przeciwieństwie do dziedziny czasu).
+	
+	Poniższe równanie przedstawia ciągłą transformatę Fouriera i pokazuje, w jaki sposób dowolny sygnał czasu ciągłego może być reprezentowany jako suma (całka) sinusoid o wszystkich możliwych częstotliwościach:
+	
+	\[S(f) = \int_{-\infty}^{\infty} s(t) \cdot e^{-j2\pi ft} \, dt\]
+	
+	Gdzie:
+	\begin{itemize}
+		\item $S(f)$ reprezentuje transformatę Fouriera sygnału $s(t)$,
+		\item $e$ jest podstawą logarytmu naturalnego (e $\approx$ 2,71828),
+		\item $j$ jest jednostką urojoną (spełniającą $j^2 = -1$).
+	\end{itemize}
+	\medskip
+	Jednak ta transformata w czystej postaci nie była wystarczająco wydajna, dlatego powstały algorytmy usprawniające jej działanie:
+	
+	\subsubsection{DFT i FFT}
+	\textbf{DFT (Dyskretna Transformata Fouriera)} \cite{Fouriersvantec} to narzędzie matematyczne służące do przekształcania dyskretnych, okresowych sygnałów z ich reprezentacji w dziedzinie czasu na reprezentację w dziedzinie częstotliwości. Pozwala to na analizę i manipulację w dziedzinie częstotliwości przed potencjalnym przekształceniem z powrotem do dziedziny czasu za pomocą odwrotnej DFT.
+	
+	Dyskretna Transformata Fouriera wyraża się wzorem:
+	
+	\[X[k] = \sum_{n=0}^{N-1} x[n] \cdot e^{-j\left(\frac{2\pi}{N}\right) k n}\]
+	
+	Gdzie:
+	\begin{itemize}
+		\item \( X[k] \) jest \( k \)-tym elementem reprezentacji w dziedzinie częstotliwości,
+		\item \( x[n] \) jest \( n \)-tym elementem sygnału w dziedzinie czasu,
+		\item \( e \) jest podstawą logarytmu naturalnego (w przybliżeniu równą 2,71828),
+		\item \( j \) jest jednostką urojoną (spełniającą \( j^2 = -1 \)).
+	\end{itemize}
+	\medskip
+	Zauważono, że istnieje dalsza możliwość znacznego usprawnienia algorytmu liczenia DFT. Wynikiem tego spostrzeżenia była \textbf{FFT (Szybka Transformata Fouriera)} \cite{Fouriersvantec}. Została opracowana przez \textbf{Jamesa W. Cooleya i Johna W. Tukeya} w 1965 roku. Ich wersja algorytmu znacznie zmniejszyła złożoność obliczeniową przetwarzania dużych zbiorów danych. 
+	
+	Dla przykładu \cite{Fouriertumanski} obliczenie DFT dla 1000 próbek wymaga 1 048 576 mnożeń i 1 047 552 dodawań. Dla porównania, w przypadku FFT, jeśli liczba próbek jest wielokrotnością liczby 2 (a więc 64, 128, 256, 512 czy 1024), to obliczenia można znacznie uprościć. W algorytmie FFT obliczanie wyniku dla 1024 próbek wymaga tylko 5 120 mnożeń i 10 240 dodawań.
+	
+	FFT jest algorytmem używanym do obliczania dyskretnej transformaty Fouriera (DFT) i jej odwrotności. DFT jest przekształceniem stosowanym w przetwarzaniu sygnałów, w celu przekształcenia dyskretnego sygnału w jego reprezentację w dziedzinie częstotliwości. FFT przyspiesza proces obliczania DFT, umożliwiając jego wykorzystanie w aplikacjach czasu rzeczywistego i dla dużych zbiorów danych.
+	
+	\subsubsection{Różnice między transformatą Fouriera, a FFT}
+	\textbf{Różnica między szybką transformatą Fouriera (FFT) a transformatą Fouriera (FT) \cite{Fouriersvantec} leży w sposobie obliczeń i efektywności}. FFT to specjalna, wydajniejsza metoda obliczania dyskretnej transformaty Fouriera (DFT), która jest z kolei dyskretnym odpowiednikiem ciągłej transformaty Fouriera (FT).
+	
+	FT przekształca sygnał ciągły w dziedzinie czasu na sygnał ciągły w dziedzinie częstotliwości. W praktyce jednak często mamy do czynienia z sygnałami próbkowanymi (dyskretnymi), dlatego używa się DFT, która przekształca ciąg próbek sygnału w ciąg równie licznych próbek jego widma częstotliwościowego.
+	
+	FFT to zoptymalizowana wersja DFT, która redukuje złożoność obliczeniową. Dzięki temu FFT jest znacznie szybsza w obliczeniach niż bezpośrednie zastosowanie DFT, szczególnie dla dużych zestawów danych. Optymalizacje te opierają się na dekompozycji DFT na mniejsze DFT o rozmiarach będących potęgami liczby 2.
+	
+	%------------------------------------------------------------------------
+	\section{Koncepcja}
+	\label{sec:koncepcja}
+	Po przeanalizowaniu założeń oraz wymagań projektowych, gotowych rozwiązań oraz dostępnych bibliotek pozwalających przetwarzać sygnały i wykonywać operacje na nich, wyklarowała się pewna koncepcja rozwiązania.
+	
+	\subsection{Mapa myśli}
+	\begin{itemize}
+		\item \textbf{Cel projektu:} Szybka i dokładna analiza sygnału odebranego z łazika marsjańskiego w celu wykrycia zakresu częstotliwości transmisji
+		\item \textbf{Metody analizy:}
+		\begin{itemize}
+			\item Szybka Transformata Fouriera (FFT) - wybrana ze względu na wysoką wydajność działania oraz niskie zużycie zasobów
+			\item Filtracja sygnału - usuwanie ewentualnych szumów, które mogłyby utrudniać, bądź uniemożliwiać poprawną analizę sygnału, także usuwanie składowych stałych (normalizacja)
+			\item Wizualizacja wyników - w postaci wykresu widma sygnału
+		\end{itemize}
+		\item \textbf{Narzędzia:}
+		\begin{itemize}
+			\item Język programowania Python oraz biblioteki pozwalające na analizę sygnału oraz wizualizację wyników (NumPy, SciPy, Matplotlib) - model referencyjny, pierwsza wersja rozwiązania
+			\item MATLAB - weryfikacja działania programu napisanego w języku Python
+			\item FPGA (Verilog) - docelowa implementacja sprzętowa projektu
+		\end{itemize}
+		\item \textbf{Testowanie:}
+		\begin{itemize}
+			\item Losowy sygnał wygenerowany przez kod referencyjny
+			\item Analizator widma online \cite{analizator}
+			\item W późniejszym etapie sygnały, które zostały dostarczone wraz z zadaniem projektowym
+		\end{itemize}
+	\end{itemize}
+	\newpage
+	\subsection{Schemat blokowy rozwiązania}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale = 0.6]{Schematblokowy.png}
+		\caption{Schemat blokowy rozwiązania}
+		\label{fig:Schemat blokowy rozwiązania}
+	\end{figure}
+	
+	\subsection{Opis schematu blokowego}
+	
+	\begin{enumerate}
+		\item \textbf{Wczytanie odebranej próbki sygnału} - do zadania zostały załączone próbki sygnałów, które należy przeanalizować. Z czego wynika, że kod musi umożliwiać wprowadzenie danych, które będzie analizował (w tym przypadku plik dźwiękowy w formacie .wav)
+		\item \textbf{Próbkowanie sygnału} - umożliwi przejście z sygnału analogowego na cyfrową jego reprezentację. Pozwoli to na wykonywanie wszystkich operacji na sygnale (w zasadzie jego próbkach) prowadzących do końcowego rozwiązania - wykrycia zakresu częstotliwości transmisji
+		\item \textbf{Wejściowa filtracja} - pozwoli na usunięcie szumu oraz składowych stałych z sygnału co umożliwi przetwarzanie próbek oraz sprawi, że widmo będzie reprezentować sygnał przetworzony w sposób czytelniejszy
+		\item \textbf{Wykonanie FFT} - (Szybkiej Transformaty Fouriera) - główna operacja na sygnale, przekształca sygnał z dziedziny czasu w dziedzinę częstotliwości. Po jej wykonaniu możliwa będzie reprezentacja sygnału przy pomocy jego widma
+		\item \textbf{Detekcja zakresów częstotliwości} - główne założenie zadania. Po wykonaniu FFT, próbki można bardzo łatwo zaprezentować na wykresie, gdzie widoczne będą maksima amplitudy sygnału oraz częstotliwość, na której występują
+		\item \textbf{Wizualizacja wyników} - wyniki zostaną przedstawione jako wykres, gdzie na osi poziomej naniesione będą wartości częstotliwości, natomiast na pionowej - amplitudy
+	\end{enumerate}
+	
+	\subsection{Referencyjny kod w języku Python}
+    \label{ss:Referencyjny kod w języku Python}
+	Program generuje losowy sygnał testowy, zapisuje go do pliku .wav, następnie analizuje sygnał i wyświetla widmo.
+
+    \begin{listing}[H]
+        \caption{Referencyjny kod w języku Python}
+        \label{lst:Referencyjny kod w języku Python}
+	\begin{minted}[numbers=left]{python}
+import numpy as np
+from scipy.fft import fft
+from scipy.io import wavfile
+import matplotlib.pyplot as plt
+		
+# Parametry sygnalu
+fs = 5000  # czestotliwosc probkowania [Hz]
+T = 1.0    # czas trwania [s]
+N = 1024   # liczba punktow FFT
+
+# Generowanie sygnalu testowego (2 skladowe + szum)
+t = np.linspace(0, T, int(fs*T), endpoint=False)
+signal = (1.0 * np.sin(2*np.pi*300*t) + \
+(0.5 * np.sin(2*np.pi*800*t)) + \
+(0.2 * np.random.randn(len(t))))
+		
+# Normalizacja sygnalu do zakresu [-1, 1]
+signal_normalized = signal / np.max(np.abs(signal))
+		
+# Zapis do pliku WAV (16-bit)
+wavfile.write('D:/test_signal.wav', fs, (signal_normalized * 32767).astype(np.int16))
+
+# Obliczenie FFT
+yf = fft(signal[:N])
+xf = np.linspace(0, fs/2, N//2)
+	
+# Wizualizacja
+plt.figure(figsize=(10,4))
+plt.plot(xf, 2/N * np.abs(yf[:N//2]))
+plt.title('Widmo sygnalu testowego')
+plt.xlabel('Czestotliwosc [Hz]')
+plt.ylabel('Amplituda')
+plt.grid()
+plt.show()
+		
+print("Sygnal zostal zapisany do pliku 'test_signal.wav'")
+	   \end{minted}
+    \end{listing}
+    
+	\subsection{Kod sprawdzający w MATLAB}
+	Dodatkowo, w oparciu o stronę dokumentacji \cite{analizamatlab} \cite{analizamatlab2}, został napisany kod w MATLAB (używający paczki narzędzi Signal Procesing Toolbox \cite{MatlabSignal}), który również jest w stanie pobrać plik .wav, spróbkować, przefiltrować i policzyć Szybką Transformatę Fouriera. Wyniki również prezentuje w postaci wykresu.
+    
+	\begin{listing}[H]
+        \caption{Kod sprawdzający MATLAB - 1}
+        \label{lst:Kod sprawdzający MATLAB - 1}
+	\begin{minted}[numbers=left]{matlab}
+    % Analiza widma sygnalu z pliku WAV
+clear all;
+close all;
+clc;
+    % 1. Wczytanie pliku WAV
+[filename, pathname] = uigetfile('*.wav', 'Wybierz plik WAV do analizy');
+if isequal(filename, 0)
+disp('Anulowano wybor pliku');
+return;
+end
+[y, fs] = audioread(fullfile(pathname, filename));
+    % 2. Preprocessing sygnalu
+    % Konwersja na mono jesli stereo
+if size(y, 2) > 1
+y = mean(y, 2);
+disp('Sygnal stereo przekonwertowany na mono');
+end
+    % Parametry analizy
+N = length(y);          % Dlugosc sygnalu
+t = (0:N-1)/fs;         % Os czasu
+f = (0:N-1)*(fs/N);     % Os czestotliwosci
+f = f(1:floor(N/2));    % Tylko czestotliwosci dodatnie
+    % 3. Obliczenie transformaty Fouriera
+Y = fft(y);
+P2 = abs(Y/N);          % Spektrum dwustronne
+P1 = P2(1:floor(N/2));  % Spektrum jednostronne
+P1(2:end-1) = 2*P1(2:end-1); % Skalowanie amplitudy
+    % 4. Wykrywanie glownych skladowych czestotliwosciowych
+[peaks, locs] = findpeaks(P1, 'MinPeakHeight', 0.1*max(P1));
+freq_peaks = f(locs);
+    % 5. Wizualizacja wynikow
+figure('Name', 'Analiza widma sygnalu', 'NumberTitle', 'off');
+    % Wykres sygnalu w dziedzinie czasu
+subplot(2,1,1);
+plot(t, y);
+title('Sygnal w dziedzinie czasu');
+xlabel('Czas [s]');
+ylabel('Amplituda');
+xlim([0 t(end)]);
+grid on;
+    % Wykres widma czestotliwosciowego
+subplot(2,1,2);
+plot(f, P1);
+title('Widmo czestotliwosciowe (FFT)');
+xlabel('Czestotliwosc [Hz]');
+ylabel('|Amplituda|');
+hold on;
+plot(f(locs), peaks, 'ro'); % Zaznaczenie pikow
+for i = 1:length(peaks)
+text(f(locs(i)), peaks(i), sprintf(' %.1f Hz', freq_peaks(i)));
+end
+hold off;
+grid on;
+xlim([0 fs/2]);
+\end{minted}
+	\end{listing}
+    \begin{listing}[H]
+        \caption{Kod sprawdzający MATLAB - 2}
+        \label{lst:Kod sprawdzający MATLAB - 2}
+	\begin{minted}[numbers=left]{matlab}
+    % Wyswietlenie informacji o sygnale
+fprintf('\nAnaliza pliku: %s\n', filename);
+fprintf('Czestotliwosc probkowania: %d Hz\n', fs);
+fprintf('Czas trwania: %.2f s\n', N/fs);
+fprintf('Wykryte glowne skladowe czestotliwosciowe:\n');
+disp(freq_peaks');
+	   \end{minted}
+	\end{listing}
+	
+	\subsection{Testowanie kodu referencyjnego}
+    \label{ss:Testowanie kodu referencyjnego}
+	\subsubsection{Wynik działania kodu referencyjnego napisanego w języku Python}
+        \label{sss:Wynik działania kodu referencyjnego napisanego w języku Python}
+	Kod sam wygeneruje losowy sygnał o 2 składowych, który następnie zapisze do pliku .wav. Pozwoli to na użycie tego samego sygnału w innym narzędziu analizującym widmo (w tym przypadku \cite{analizator}) w celu zweryfikowania poprawności działania kodu.\\
+	
+	Wynik działania kodu referencyjnego:
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale = 0.7]{kod-referencyjny.png}
+		\caption{Wynik działania kodu referencyjnego}
+		\label{fig:Wynik działania kodu referencyjnego}
+	\end{figure}
+	
+	Wykres prezentuje widmo wygenerowanego sygnału, który został spróbkowany, znormalizowany oraz policzona została Szybka Transformata Fouriera, a wynik zaprezentowany w postaci wykresu.\\
+	
+	\subsubsection{Wynik analizy sygnału w analizatorze widma online}
+	
+	W celu weryfikacji poprawności działania kodu skorzystano z analizatora widma dostępnego online \cite{analizator}. Sygnał zapisany przez kod referencyjny został zaimportowany do programu i przeanalizowany.\\
+	\medskip
+	Wynik jest następujący:
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale = 0.6]{analizatoronline.png}
+		\caption{Wynik działania analizatora widma online}
+		\label{fig:Wynik działania analizatora widma online}
+	\end{figure}
+	
+	\subsubsection{Wynik działania kodu sprawdzającego MATLAB}
+	
+	Kolejną metodą weryfikacji będzie kod napisany w MATLAB, który również jest w stanie przeanalizować sygnał i przedstawić jego widmo w postaci wykresu.\\
+	Wynik jego działania jest następujący:
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale = 0.6]{wynikmatlab.png}
+		\caption{Wynik działania kodu MATLAB}
+		\label{fig:Wynik działania kodu MATLAB}
+	\end{figure}
+	
+	\subsubsection{Podsumowanie testów}
+	Zarówno na wykresie wygenerowanym przez kod referencyjny, program online jak i kod w MATLAB można zaobserwować, że maksimum amplitudy sygnału występuje w okolicach 300 Hz oraz 800 Hz. Dowodzi to poprawności napisanego kodu (tego w języku Python oraz tego w MATLAB) oraz jego zdolności do poprawnego przetworzenia sygnału wejściowego - FFT została policzona poprawnie, wykres widma również został utworzony w sposób poprawny. Rozwiązania te zostaną wykorzystane na etapie finalnej implementacji rozwiązania.
+	
+	%------------------------------------------------------------------------
+	\section{Implementacja}
+	\label{sec:implementacja}
+	\subsection{Finalna realizacja systemu w języku Python}
+	
+        \begin{listing}[H]
+        \caption{Finalna realizacja systemu w języku Python - 1}
+        \label{lst:Finalna realizacja systemu w języku Python - 1}
+	\begin{minted}[numbers=left]{Python}
+import numpy as np
+import matplotlib.pyplot as plt
+import wave
+import struct
+import sys
+import os
+
+
+def read_wav_file(filename):
+
+"""Odczytuje plik .wav i zwraca sygnał oraz częstotliwość próbkowania."""
+with wave.open(filename, 'rb') as wav_file:
+n_channels = wav_file.getnchannels()
+sample_width = wav_file.getsampwidth()
+framerate = wav_file.getframerate()
+n_frames = wav_file.getnframes()
+
+frames = wav_file.readframes(n_frames)
+if sample_width == 1:
+fmt = f"{n_frames * n_channels}B"  # unsigned char
+elif sample_width == 2:
+fmt = f"{n_frames * n_channels}h"  # short
+else:
+raise ValueError("Nieobsługiwana szerokość próbki")
+
+signal = np.array(struct.unpack(fmt, frames))
+
+if n_channels == 2:
+signal = signal.reshape(-1, 2)
+signal = signal.mean(axis=1)  # Konwersja stereo na mono
+
+return signal, framerate
+\end{minted}
+	\end{listing}
+    \newpage
+\begin{listing}[H]
+        \caption{Finalna realizacja systemu w języku Python - 2}
+        \label{lst:Finalna realizacja systemu w języku Python - 2}
+	\begin{minted}[numbers=left]{Python}
+def fft(x):
+
+"""Ręcznie zaimplementowana szybka transformata Fouriera (FFT)."""
+N = len(x)
+if N <= 1:
+return x
+even = fft(x[0::2])
+odd = fft(x[1::2])
+T = [np.exp(-2j * np.pi * k / N) * odd[k] for k in range(N // 2)]
+return [even[k] + T[k] for k in range(N // 2)] + [even[k] - T[k] for k in range(N // 2)]
+
+def analyze_frequencies(signal, sample_rate):
+
+"""Analizuje sygnał i znajduje znaczące piki częstotliwościowe."""
+n = len(signal)
+
+# Usuwanie składowej stałej (DC offset)
+signal = signal - np.mean(signal)
+
+# Zastosowanie okna Hanninga
+window = np.hanning(n)
+signal_windowed = signal * window
+
+# Obliczenie FFT
+fft_result = np.abs(fft(signal_windowed))
+
+# Obliczenie częstotliwości (pomijamy częstotliwość ujemną)
+freqs = np.fft.fftfreq(n, d=1 / sample_rate)[:n // 2]
+fft_magnitude = fft_result[:n // 2]
+
+# Normalizacja (do wartości maksymalnej)
+if np.max(fft_magnitude) > 0:
+fft_magnitude = fft_magnitude / np.max(fft_magnitude)
+
+# Znajdź piki (powyżej pewnego progu)
+threshold = 0.1  # Próg dla znaczących pików
+peaks = np.where(fft_magnitude > threshold)[0]
+
+# Pogrupuj bliskie piki
+peak_groups = []
+if len(peaks) > 0:
+current_group = [peaks[0]]
+for peak in peaks[1:]:
+if peak - current_group[-1] < 2:  # Grupuj bliskie częstotliwości
+current_group.append(peak)
+else:
+peak_groups.append(current_group)
+current_group = [peak]
+peak_groups.append(current_group)
+\end{minted}
+	\end{listing}
+\begin{listing}[H]
+        \caption{Finalna realizacja systemu w języku Python - 3}
+        \label{lst:Finalna realizacja systemu w języku Python - 3}
+	\begin{minted}[numbers=left]{Python}
+# Wybierz najwyższy pik z każdej grupy
+significant_peaks = []
+for group in peak_groups:
+max_peak_idx = group[np.argmax(fft_magnitude[group])]
+significant_peaks.append(max_peak_idx)
+
+peak_freqs = freqs[significant_peaks]
+peak_mags = fft_magnitude[significant_peaks]
+
+# Filtruj piki powyżej 20 Hz (aby pominąć resztki DC i niskie zakłócenia)
+mask = peak_freqs > 20
+peak_freqs = peak_freqs[mask]
+peak_mags = peak_mags[mask]
+
+return freqs, fft_magnitude, peak_freqs, peak_mags
+
+def plot_spectrum(freqs, spectrum, peak_freqs, peak_mags, filename):
+
+"""Rysuje widmo sygnału z oznaczonymi pikami."""
+plt.figure(figsize=(12, 6))
+plt.plot(freqs, spectrum, label="Widmo amplitudowe")
+
+# Zaznacz tylko istotne piki
+if len(peak_freqs) > 0:
+plt.scatter(peak_freqs, peak_mags, color='red', label="Znaczące piki")
+for freq, mag in zip(peak_freqs, peak_mags):
+plt.text(freq, mag + 0.05, f"{freq:.2f} Hz", ha='center', fontsize=9)
+
+plt.title(f"Analiza częstotliwościowa sygnału: {os.path.basename(filename)}")
+plt.xlabel("Częstotliwość (Hz)")
+plt.ylabel("Amplituda (znormalizowana)")
+plt.grid()
+plt.legend()
+plt.xlim(0, max(freqs))  # Pomijamy częstotliwości ujemne
+plt.show()
+
+
+def main():
+# Sprawdź argumenty linii poleceń
+if len(sys.argv) != 2:
+print("Użycie: python analizator_fft.py <plik.wav>")
+print("Przykład: python analizator_fft.py test.wav")
+sys.exit(1)
+
+filename = sys.argv[1]
+
+# Sprawdź czy plik istnieje
+if not os.path.isfile(filename):
+print(f"Błąd: Plik '{filename}' nie istnieje!")
+sys.exit(1)
+\end{minted}
+	\end{listing}
+\begin{listing}[H]
+        \caption{Finalna realizacja systemu w języku Python - 4}
+        \label{lst:Finalna realizacja systemu w języku Python - 4}
+	\begin{minted}[numbers=left]{Python}
+# Sprawdź rozszerzenie pliku
+if not filename.lower().endswith('.wav'):
+print("Uwaga: Plik nie ma rozszerzenia .wav, ale spróbuję go wczytać...")
+
+# Wczytaj sygnał z pliku .wav
+try:
+signal, sample_rate = read_wav_file(filename)
+except Exception as e:
+print(f"Błąd podczas wczytywania pliku: {e}")
+sys.exit(1)
+
+# Ogranicz do pierwszych N próbek (dla wydajności)
+max_samples = 4096  # Można zwiększyć dla lepszej rozdzielczości
+if len(signal) > max_samples:
+signal = signal[:max_samples]
+
+# Analiza częstotliwości
+freqs, spectrum, peak_freqs, peak_mags = analyze_frequencies(signal, sample_rate)
+
+# Wizualizacja
+plot_spectrum(freqs, spectrum, peak_freqs, peak_mags, filename)
+
+# Wyświetl znalezione piki
+print("\nZnalezione znaczące piki częstotliwościowe (>20 Hz):")
+if len(peak_freqs) > 0:
+for freq, mag in zip(peak_freqs, peak_mags):
+print(f"- {freq:.2f} Hz (względna amplituda: {mag:.2f})")
+else:
+print("Nie znaleziono istotnych pików powyżej progu.")
+
+if __name__ == "__main__":
+main()
+        \end{minted}
+	\end{listing}
+	
+	Powyższy kod został napisany w oparciu o program z rozdziału \ref{ss:Referencyjny kod w języku Python}, teraz jednak, zamiast generować i analizować wygenerowany sygnał, należy podać nazwę sygnału do analizy jako argument przy uruchamianiu kodu z poziomu wiersza poleceń. Kod wykona czynności niezbędne do przetworzenia sygnału (odczyt z pliku, usunięcie składowej stałej), obliczy szybką Transformatę Fouriera, a następnie poda wynik w postaci widma sygnału z oznaczonymi istotnymi "pikami" na osi częstotliwości wraz z ich dokładną lokalizacją.
+    
+	\newpage
+    
+	\subsection{Testowanie finalnego kodu w języku Python}
+	Testy zostały przeprowadzone przy użyciu sygnału o nazwie $SignalNoise8.wav$, który został dostarczony wraz z zadaniem projektowym. Sygnał ten został zaimportowany do wszystkich metod analizy opisanych w rozdziale \ref{ss:Testowanie kodu referencyjnego}.
+	
+	\subsubsection{Wynik działania finalnego kodu w języku Python}
+        \label{sss:Wynik działania finalnego kodu w języku Python}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale = 0.6]{sn8python.png}
+		\caption{Wynik działania finalnego kodu w języku Python}
+		\label{fig:Wynik działania finalnego kodu w języku Python}
+	\end{figure}
+	
+	\subsubsection{Wynik działania kodu testującego Matlab}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale = 0.65]{sn8matlab.png}
+		\caption{Wynik działania kodu testującego MATLAB}
+		\label{fig:Wynik działania kodu testującego MATLAB}
+	\end{figure}
+	\newpage
+	\subsubsection{Wynik działania analizatora widma online}
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale = 0.55]{sn8analyzer.png}
+		\caption{Wynik działania analizatora widma online dla signalNoise8.wav}
+		\label{fig:Wynik działania analizatora widma online dla signalNoise8.wav}
+	\end{figure}
+	
+	Wszystkie metody testowe zwróciły takie same, poprawne odpowiedzi. Można więc wnioskować, że kod działa poprawnie i kolejnym etapem jest przejście do implementacji zadania w Verilog.
+	
+	\subsection{Implementacja zadania w języku Verilog}
+	W celu zaimplementowania zadania projektowego na platformie FPGA został wykorzystany język Verilog oraz programy: Intel Quartus Prime Lite (kompilacja) oraz Modelsim (symulacja i otrzymanie pliku .txt z wynikami FFT)
+
+    \subsubsection{Założenia projektowe - FPGA}
+    \begin{itemize}
+        \item Implementacja bez wykorzystania IP Core
+        \item Źródłem danych jest plik signalSample.txt z gotowymi próbkami (dostarczony wraz z zadaniem projektowym)
+        \item Wynik działania projektu, po symulacji, ma być zapisany do pliku, a następnie przy pomocy kodu w języku Python ma zostać wygenerowane widmo sygnału, z którego pochodzą wejsciowe próbki (signalSample.txt)
+    \end{itemize}
+    \subsubsection{Schemat postępowania projektowego}
+    Całość zadania (pod względem funkcjonalnym) została rozłożona na czynniki pierwsze, następnie wyklarowano niezbędne bloki projektu oraz relacje między nimi.
+    \newpage
+    \begin{figure}[H]
+		\centering
+		\includegraphics[scale = 0.65]{dataflow.png}
+		\caption{Schemat przepływu danych wewnątrz projektu}
+		\label{fig:Schemat przepływu danych wewnątrz projektu}
+	\end{figure}
+    Opis poszczególnych bloków:
+    \begin{itemize}
+        \item \textbf{rom\_input.sv} - przechowuje próbki danych (pochodzące z pliku signalSample.txt, zapisane na stałe) w formacie stałoprzecinkowym - 16 bitów dla części rzeczywistej oraz 16 bitów dla części urojonej. Z tej pamięci dane ładowane są do RAM-u w kolejności z odwróceniem bitów.
+        \item \textbf{fft\_4096.sv} - główny moduł kontrolera FFT. Odpowiada za:
+            \begin{itemize}
+              \item sekwencyjne ładowanie danych do RAM,
+                \item iterację po etapach FFT (etapy motyli)
+                \item zarządzanie adresami i współczynnikami $twiddle$,
+                \item zapis wyników obliczeń z powrotem do RAM
+            \end{itemize}
+        \item \textbf{butterfly.sv} - wykonuje obliczenia dla dwóch punktów FFT z użyciem odpowiedniego współczynnika twiddle. Otrzymuje dane $x0$, $x1$, $W$ i zwraca $x0 + t$ oraz $x0 - t$ po pomnożeniu zespolonym,
+        \item \textbf{ram\_4096.sv} - dwuportowa pamięć RAM, w której przechowywane są dane wejściowe i pośrednie wyniki FFT. Każdy port posiada:
+            \begin{itemize}
+                 \item adres, sygnał zapisu, wejścia i wyjścia $real$ i $imag$,
+                  \item dostęp jednoczesny przez port A i B
+             \end{itemize}
+        \item \textbf{twiddle\_rom.sv} - ROM zawierający współczynniki $e^{-j 2 \pi k / N}$ dla wszystkich etapów FFT (preobliczone, na stałe zapisane wartości sinusa i cosinusa w formacie Q15)
+        \item \textbf{fft\_tb.sv} - testbench odpowiedzialny za:
+            \begin{itemize}
+                \item wygenerowanie zegara i resetu,
+                \item aktywowanie sygnału $start$
+                \item oczekiwanie na $done$
+                \item odczyt danych z RAM po obliczeniu FFT i zapis ich do pliku
+            \end{itemize}
+    \end{itemize}
+
+    \subsubsection{Omówienie realizacji poszczególnych modułów}
+    W tym rozdziale zostaną dokładniej przybliżone metody realizacji poszczególnych bloków funkcjonalnych projektu. Zostaną również przedstawione najważniejsze fragmenty kodu.
+    \begin{itemize}
+        \item \textbf{rom\_input.sv} - pamięć ROM zawierająca 4096 próbek sygnału wejściowego. W pliku dostarczonym z zadaniem projektowym w pliku znajduje się 4000 próbek - został on uzupełniony zerami do wartości, która jest konkretną potęgą liczby 2. Dane zawarte w module są 32-bitowe (16 bitów część rzeczywista i 16 bitów dla części urojonej, która zawsze jest równa 0). ROM adresowany jest 12-bitowo (4096 elementów). W celu utworzenia takiej postaci danych w ROM wykorzystano kod w języku Python\\
+
+
+        \begin{listing}[H]
+            \caption{Kod przetwarzający próbki na format Q1.15}
+            \label{lst:Kod przetwarzający próbki na format Q1.15}
+	       \begin{minted}[numbers=left]{Verilog}
+# Otwarcie pliku i odczyt próbek
+with open('signalSample.txt', 'r') as file:
+    samples = [float(line.strip()) for line in file.readlines()]
+
+# Sprawdzenie liczby próbek
+if len(samples) != 4096:
+    print(f"Uwaga: Liczba próbek ({len(samples)}) nie wynosi 4096!")
+
+# Generowanie danych wyjściowych
+with open('output_samples.txt', 'w') as f:
+    for i, sample in enumerate(samples):
+        scaled_value = int(sample * 32768)
+        # Formatowanie ujemnych wartości (używając wartości bezwzględnej i znaku minus)
+        sign = '-' if scaled_value < 0 else ''
+        abs_value = abs(scaled_value)
+        line = f"12'd{i:<4} : begin data_real = {sign}16'sd{abs_value}; data_imag = -16'sd0; end\n"
+        f.write(line)
+
+print("Przetwarzanie zakończone. Wynik zapisano w pliku 'output_samples.txt'")
+                \end{minted}
+	\end{listing}
+        \begin{listing}[H]
+            \caption{Fragment kodu modułu rom\_input.sv}
+            \label{lst:Fragment kodu modułu rom_input.sv}
+	    \begin{minted}[numbers=left]{Verilog}
+module rom_input (
+    input  [11:0] addr,
+    output reg signed [15:0] data_real,
+    output reg signed [15:0] data_imag
+);
+    always @(*) begin
+        case (addr)
+            12'd0   : begin data_real = 16'sd3584; data_imag = 16'sd0; end
+		12'd1   : begin data_real = 16'sd5632; data_imag = 16'sd0; end
+		12'd2   : begin data_real = 16'sd5120; data_imag = 16'sd0; end
+		12'd3   : begin data_real = 16'sd10752; data_imag = 16'sd0; end
+		12'd4   : begin data_real = 16'sd9472; data_imag = 16'sd0; end
+		12'd5   : begin data_real = 16'sd12032; data_imag = 16'sd0; end
+		12'd6   : begin data_real = 16'sd12288; data_imag = 16'sd0; end
+		12'd7   : begin data_real = 16'sd11264; data_imag = 16'sd0; end
+		12'd8   : begin data_real = 16'sd7424; data_imag = 16'sd0; end
+                \\pozostałe próbki
+                \\...
+                12'd4092 : begin data_real = 16'sd0; data_imag = 16'sd0; end
+		12'd4093 : begin data_real = 16'sd0; data_imag = 16'sd0; end
+		12'd4094 : begin data_real = 16'sd0; data_imag = 16'sd0; end
+		12'd4095 : begin data_real = 16'sd0; data_imag = 16'sd0; end
+		default: begin data_real = 16'sd0; data_imag = 16'sd0; end
+        endcase
+    end
+endmodule
+            \end{minted}
+	\end{listing}
+    \item \textbf{fft\_4096.sv} - główny kontroler FFT realizujący pełne przetwarzanie 4096-punktowe w użyciem RAM, ROM i butterfly. Zaimplementowany jest FSM, który zarządza etapami $IDLE$, $LOAD$, $FFT\_READ$, $FFT\_CALC$, $FFT\_WRITE$, $DONE$. Obsługuje 12 etapów $(log_2(4096) = 12$. Dodatkowo moduł ten współpracuje i integruje pozostałe ($rom\_input$, $ram\_4096$, $twiddle\_rom$, $butterfly$). Tutaj również tworzone są instancje większości modułów.\\
+    Główne sygnały:
+        \begin{itemize}
+            \item $addr\_a/b$, $we\_a/b$, $write\_real\_a/b$, $read\_real\_a/b$: interfejs RAM
+            \item $rom\_addr$, $tv\_addr$: adresy ROM
+            \item $stage$, $group\_count$, $k\_count$: sterowanie etapami FFT
+        \end{itemize}
+    
+    \begin{listing}[H]
+            \caption{Definicje parametrów i sygnałów}
+            \label{lst:Definicje parametrów i sygnałów}
+	       \begin{minted}[numbers=left]{Verilog}
+module fft_4096 (
+    input        clk,
+    input        reset,
+    input        start,
+    output reg   done
+);
+    // Parametry FFT
+    localparam N = 4096;
+    localparam LOG2N = 12;
+
+    // Sygnały pamięci RAM (port A i B)
+    reg we_a, we_b;
+    reg [LOG2N-1:0] addr_a, addr_b;
+	 reg [LOG2N-1:0] addr_i1, addr_i2;
+    reg signed [15:0] din_real_a, din_imag_a;
+    wire signed [15:0] dout_real_a, dout_imag_a;
+    reg signed [15:0] din_real_b, din_imag_b;
+    wire signed [15:0] dout_real_b, dout_imag_b;
+
+    // Sygnały ROM-ów
+    reg [LOG2N-1:0] rom_addr;
+    wire signed [15:0] in_real, in_imag; // wyjście ROM z danymi wejściowymi
+    wire signed [15:0] tw_real, tw_imag; // wyjście ROM z współczynnikami twiddle
+    reg [LOG2N-1:0] tw_addr;
+                \end{minted}
+	\end{listing}
+
+    
+        \begin{listing}[H]
+            \caption{Przykład tworzenia instancji}
+            \label{lst:Przykład tworzenia instancji}
+	       \begin{minted}[numbers=left]{Verilog}
+// Instancje pamięci: ROM (dane wejściowe), ROM (twiddle) oraz dwuportowy RAM
+    rom_input   rom_inst(.addr(rom_addr), .data_real(in_real), .data_imag(in_imag));
+    twiddle_rom tw_inst(.addr(tw_addr), .twiddle_real(tw_real), .twiddle_imag(tw_imag));
+    ram_4096    ram_inst (
+        .clk(clk),
+        .we_a(we_a),
+        .addr_a(addr_a),
+        .din_real_a(din_real_a),
+        .din_imag_a(din_imag_a),
+        .dout_real_a(dout_real_a),
+        .dout_imag_a(dout_imag_a),
+        .we_b(we_b),
+        .addr_b(addr_b),
+        .din_real_b(din_real_b),
+        .din_imag_b(din_imag_b),
+        .dout_real_b(dout_real_b),
+        .dout_imag_b(dout_imag_b)
+    );
+                \end{minted}
+	\end{listing}
+    \newpage
+    \begin{listing}[H]
+            \caption{Sterowanie FSM}
+            \label{lst:Sterowanie FSM}
+	       \begin{minted}[numbers=left]{Verilog}
+// Sterowanie FSM
+    always @(posedge clk or posedge reset) begin
+        if (reset) begin
+            // Reset asynchroniczny
+            state       <= IDLE;
+            done        <= 1'b0;
+            we_a        <= 1'b0;
+            we_b        <= 1'b0;
+            load_count  <= 0;
+            stage       <= 0;
+            group_count <= 0;
+            k_count     <= 0;
+            addr_a      <= 0;
+            addr_b      <= 0;
+            din_real_a  <= 0;
+            din_imag_a  <= 0;
+            din_real_b  <= 0;
+            din_imag_b  <= 0;
+            rom_addr    <= 0;
+            tw_addr     <= 0;
+        end else begin
+                \end{minted}
+	\end{listing}
+
+    \begin{listing}[H]
+            \caption{Stany FSM - 1 LOAD}
+            \label{lst:Stany FSM - 1 LOAD}
+	       \begin{minted}[numbers=left]{Verilog}
+LOAD: begin
+                    // Ładuj dane wejściowe z ROM do RAM (z odwróceniem bitów adresu)
+                    addr_a     <= bit_reverse12(load_count);
+                    din_real_a <= in_real;
+                    din_imag_a <= in_imag;
+                    we_a       <= 1'b1;
+                    rom_addr   <= load_count + 1;
+                    if (load_count < N-1) begin
+                        load_count <= load_count + 1;
+                        state <= LOAD;
+                    end else begin
+                        // Ostatni zapis
+                        we_a       <= 1'b0;
+                        load_count <= load_count + 1;
+                        stage       <= 0;
+                        group_count <= 0;
+                        k_count     <= 0;
+                        state       <= FFT_READ;
+                    end
+                end
+                \end{minted}
+	\end{listing}
+    \newpage
+    \begin{listing}[H]
+            \caption{Stany FSM - 2 READ, 3 WAIT}
+            \label{lst:Stany FSM - 2 READ, 3 WAIT}
+	       \begin{minted}[numbers=left]{Verilog}
+FFT_READ: begin
+                    // Przygotuj odczyt dwóch elementów dla motyla
+                    we_a   <= 1'b0;
+                    we_b   <= 1'b0;
+                    // Oblicz adresy elementów wewnątrz grupy
+                    addr_i1 = base + k_count;
+                    addr_i2 = base + half + k_count;
+                    tw_addr <= k_count * step;
+                    addr_a <= addr_i1;
+                    addr_b <= addr_i2;
+                    state  <= FFT_WAIT;
+                end
+
+                //----------------------------------
+                FFT_WAIT: begin
+                    // Czekaj cykl na dane z RAM
+                    state <= FFT_CALC1;
+                end
+                \end{minted}
+	\end{listing}
+
+    \begin{listing}[H]
+            \caption{Stany FSM - 4 CALC1, 5 CALC2}
+            \label{lst:Stany FSM - 4 CALC1, 5 CALC2}
+	       \begin{minted}[numbers=left]{Verilog}
+FFT_CALC1: begin
+                    // Odczyt danych (przechowaj w rejestrach motyla)
+                    bf_xr <= dout_real_a;
+                    bf_xi <= dout_imag_a;
+                    bf_yr <= dout_real_b;
+                    bf_yi <= dout_imag_b;
+                    bf_wr <= tw_real;
+                    bf_wi <= tw_imag;
+                    state <= FFT_CALC2;
+                end
+
+                //----------------------------------
+                FFT_CALC2: begin
+                    // Wykonaj motyla (z użyciem modułu butterfly)
+                    out0_real <= bf_out0_r >>> 1;
+                    out0_imag <= bf_out0_i >>> 1;
+                    out1_real <= bf_out1_r >>> 1;
+                    out1_imag <= bf_out1_i >>> 1;
+                    state <= FFT_WRITE;
+                end
+
+                \end{minted}
+	\end{listing}
+    \newpage
+    \begin{listing}[H]
+            \caption{Stany FSM - 6 WRITE, 7 DONE}
+            \label{lst:Stany FSM - 6 WRITE, 7 DONE}
+	       \begin{minted}[numbers=left]{Verilog}
+FFT_WRITE: begin
+                    // Zapisz wyniki motyla z powrotem do RAM
+                    we_a      <= 1'b1;
+                    we_b      <= 1'b1;
+                    addr_a    <= addr_i1;
+                    addr_b    <= addr_i2;
+                    din_real_a <= out0_real;
+                    din_imag_a <= out0_imag;
+                    din_real_b <= out1_real;
+                    din_imag_b <= out1_imag;
+                    if (k_count < (half - 1)) begin
+                        // Następny motyl w grupie
+                        k_count <= k_count + 1;
+                        state   <= FFT_READ;
+                    end else begin
+                        // Koniec grupy
+                        k_count <= 0;
+                        if (group_count < ((N >> (stage+1)) - 1)) begin
+                            group_count <= group_count + 1;
+                            state       <= FFT_READ;
+                        end else begin
+                            // Koniec etapu
+                            group_count <= 0;
+                            if (stage < (LOG2N - 1)) begin
+                                stage <= stage + 1;
+                                state <= FFT_READ;
+                            end else begin
+                                // Koniec FFT
+                                we_a <= 1'b0;
+                                we_b <= 1'b0;
+                                done <= 1'b1;
+                                state <= DONE_STATE;
+                            end
+                        end
+                    end
+                end
+
+                //----------------------------------
+                DONE_STATE: begin
+                    // FFT zakończone
+                    done <= 1'b1;
+                end
+                \end{minted}
+	\end{listing}
+    \newpage
+        \item \textbf{butterfly.sv} - moduł realizuje podstawową operację FFT - obliczanie tzw. motyla, czyli transformacji dwóch punktów danych przy pomocy współczynnika $twiddle$. \\
+        Wejścia:
+        \begin{itemize}
+            \item $xr$, $xi$ - dane wejściowe punktu A (real i imag)
+            \item $yr$, $yi$ - dane wejściowe punktu B (real i imag)
+            \item $wr$, $wi$ - współczynnik twiddle
+        \end{itemize}
+        Wyjścia:
+        \begin{itemize}
+            \item $out0\_r$, $out0\_i$ - wynik A + B*W
+            \item $out1\_r$, $out1\_i$ - wynik A - B*W
+        \end{itemize}
+
+        \begin{listing}[H]
+            \caption{Kod pliku butterfly.sv}
+            \label{lst:Kod pliku butterfly.sv}
+	       \begin{minted}[numbers=left]{Verilog}
+module butterfly (
+    input  signed [15:0] xr, xi,      // x0: część rzeczywista i urojona
+    input  signed [15:0] yr, yi,      // x1: część rzeczywista i urojona
+    input  signed [15:0] wr, wi,      // współczynnik twiddle: część rzeczywista i urojona
+    output signed [15:0] out0_r, out0_i, // wynik x0 + t
+    output signed [15:0] out1_r, out1_i  // wynik x0 - t
+);
+    // Mnożenia pośrednie (32-bitowe)
+    wire signed [31:0] mult0 = yr * wr;
+    wire signed [31:0] mult1 = yi * wi;
+    wire signed [31:0] mult2 = yr * wi;
+    wire signed [31:0] mult3 = yi * wr;
+    // Obliczenie t = y * W
+    wire signed [15:0] t_real = (mult0 - mult1) >>> 15;
+    wire signed [15:0] t_imag = (mult2 + mult3) >>> 15;
+    // Wyniki motyla: x0 + t oraz x0 - t
+    assign out0_r = xr + t_real;
+    assign out0_i = xi + t_imag;
+    assign out1_r = xr - t_real;
+    assign out1_i = xi - t_imag;
+endmodule
+                \end{minted}
+	\end{listing}
+    \newpage
+    \item \textbf{ram\_4096.sv} - dwuportowa pamięć RAM z niezależnymi portami A i B. Posiada 4096 komórek dla części rzeczywistej i urojonej, obsługuje zapis/odczyt synchroniczny na zboczu $clk$, inicjalizacja zerami. 
+
+    \begin{listing}[H]
+            \caption{Kod z pliku ram\_4096.sv}
+            \label{lst:Kod z pliku ram_4096.sv}
+	       \begin{minted}[numbers=left]{Verilog}
+(* ramstyle = "no_rw_check, M10K" *)
+module ram_4096 (
+    input clk,
+
+    // Port A
+    input             we_a,
+    input  [11:0]     addr_a,
+    input  signed [15:0] din_real_a, din_imag_a,
+    output reg signed [15:0] dout_real_a, dout_imag_a,
+
+    // Port B
+    input             we_b,
+    input  [11:0]     addr_b,
+    input  signed [15:0] din_real_b, din_imag_b,
+    output reg signed [15:0] dout_real_b, dout_imag_b
+);
+    // Wspólna pamięć 32-bitowa (łączymy real i imag w jednym słowie)
+    reg signed [31:0] mem[0:4095];
+    integer i;
+    initial begin
+        for (i = 0; i < 4096; i = i + 1) begin
+            mem[i] = 32'sd0;
+        end
+    end
+
+    always @(posedge clk) begin
+        // Port A: zapis
+        if (we_a) begin
+            mem[addr_a] <= {din_real_a, din_imag_a};
+        end
+        // Port B: zapis
+        if (we_b) begin
+            mem[addr_b] <= {din_real_b, din_imag_b};
+        end
+        // Port A: odczyt (po zapisie lub bez)
+        dout_real_a <= mem[addr_a][31:16];
+        dout_imag_a <= mem[addr_a][15:0];
+        // Port B: odczyt
+        dout_real_b <= mem[addr_b][31:16];
+        dout_imag_b <= mem[addr_b][15:0];
+    end
+endmodule
+
+                \end{minted}
+	\end{listing}
+    \newpage
+    \item \textbf{twiddle\_rom.sv} - ROM zawierający współczynniki twiddle $e^{-j 2 \pi k / N}$. Zapisane w nim wartości zostały obliczone przy pomocy kodu w języku Python i zapisane w postaci Q15. Dane są 32-bitowe (16 bitów real + 16 bitów imag). Dla FFT 4096 potrzebne są 2048 unikalnych współczynników.
+
+    \begin{listing}[H]
+            \caption{Kod w języku Python, który pozwolił na obliczenie współczynników twiddle}
+            \label{lst:Kod w języku Python, który pozwolił na obliczenie współczynników twiddle}
+	       \begin{minted}[numbers=left]{Verilog}
+import numpy as np
+
+def generate_twiddle_factors(N, filename="twiddle_rom.txt"):
+    with open(filename, "w") as f:
+        for k in range(N // 2):
+            angle = -2 * np.pi * k / N
+            re = np.cos(angle)
+            im = np.sin(angle)
+
+            # Q15 format (skalowanie na zakres -32768 .. 32767)
+            re_q15 = int(np.round(re * (2**15 - 1)))
+            im_q15 = int(np.round(im * (2**15 - 1)))
+
+            # Zabezpieczenie przed overflow (zachowaj -32768 jako granicę)
+            re_q15 = np.clip(re_q15, -32768, 32767)
+            im_q15 = np.clip(im_q15, -32768, 32767)
+
+            # Format do Veriloga: np. -16'sd12345, 16'sd6789
+            line = f"{'-' if re_q15 < 0 else ''}16'sd{abs(re_q15)}, 
+            {'-' if im_q15 < 0 else ''}16'sd{abs(im_q15)}\n"
+            f.write(line)
+
+    print(f"Współczynniki zapisane do {filename}")
+
+generate_twiddle_factors(4096)
+
+                \end{minted}
+	\end{listing}
+    \begin{listing}[H]
+            \caption{Fragment kodu z pliku twiddle\_rom.sv}
+            \label{lst:Fragment kodu z pliku twiddle_rom.sv}
+	       \begin{minted}[numbers=left]{Verilog}
+module twiddle_rom (
+    input  [11:0] addr,
+    output reg signed [15:0] twiddle_real,
+    output reg signed [15:0] twiddle_imag
+);
+    always @(*) begin
+        case (addr)
+            12'd0   : begin twiddle_real = 16'sd32767; twiddle_imag = 16'sd0; end
+            12'd1   : begin twiddle_real = 16'sd32767; twiddle_imag = -(16'sd51); end
+            12'd2   : begin twiddle_real = 16'sd32767; twiddle_imag = -(16'sd101); end
+            12'd3   : begin twiddle_real = 16'sd32767; twiddle_imag = -(16'sd151); end
+            12'd4   : begin twiddle_real = 16'sd32767; twiddle_imag = -(16'sd202); end
+            \\pozostałe współczynniki
+            \\...
+            12'd2046: begin twiddle_real = -(16'sd32767); twiddle_imag = -(16'sd101); end
+            12'd2047: begin twiddle_real = -(16'sd32767); twiddle_imag = -(16'sd51); end
+            default: begin twiddle_real = 16'sd32767; twiddle_imag = 16'sd0; end
+        endcase
+    end
+endmodule
+                \end{minted}
+	\end{listing}
+    \newpage
+    \item \textbf{fft\_tb.sv} - Testbench symulujący działanie całego systemu FFT. Inicjalizuje $clk$, $reset$, $start$, czeka na $done$ z FFT, odczytuje dane z RAM (port A lub B) po zakończeniu FFT, zapisuje wyniki do pliku tekstowego $fft\_output.txt$ w formacie: $<real> <imag>$.
+
+    \begin{listing}[H]
+            \caption{Kod z pliku fft\_tb.sv - 1}
+            \label{lst:Kod z pliku fft_tb.sv - 1}
+	       \begin{minted}[numbers=left]{Verilog}
+`timescale 1ns/1ps
+module fft_tb;
+    reg clk;
+    reg reset;
+    reg start;
+    wire done;
+
+    reg signed [31:0] fft_val;
+    reg signed [15:0] fft_real, fft_imag;
+    integer i, outfile;
+
+    // Instancja modułu FFT 4096
+    fft_4096 fft_uut (
+        .clk(clk),
+        .reset(reset),
+        .start(start),
+        .done(done)
+    );
+
+    // Generowanie zegara
+    always #5 clk = ~clk;
+
+    initial begin
+        // Reset i start
+        clk = 0;
+        reset = 1;
+        start = 0;
+        #20;
+        reset = 0;
+        #10;
+        start = 1;
+        #10;
+        start = 0;
+
+        // Czekaj na sygnał done
+        @(posedge done);
+        $display("FFT computation completed. Reading results...");
+
+        // Otwórz plik wynikowy
+        outfile = $fopen("fft_output.txt", "w");
+        if (!outfile) begin
+            $display("Nie mogę otworzyć pliku wyjściowego!");
+            $finish;
+        end
+        \end{minted}
+	\end{listing}
+    \newpage
+        \begin{listing}[H]
+            \caption{Kod z pliku fft\_tb.sv - 2}
+            \label{lst:Kod z pliku fft_tb.sv - 2}
+	       \begin{minted}[numbers=left]{Verilog}
+        // Odczytaj kolejne próbki z pamięci RAM i zapisz do pliku
+        for (i = 0; i < 4096; i = i + 1) begin
+            fft_val  = fft_uut.ram_inst.mem[i];      // dostęp do wewnętrznej pamięci RAM
+            fft_real = fft_val[31:16];
+            fft_imag = fft_val[15:0];
+            $fwrite(outfile, "%d %d\n", fft_real, fft_imag);
+        end
+
+        $fclose(outfile);
+        $display("Results written to fft_output.txt");
+        $finish;
+    end
+endmodule
+                \end{minted}
+	\end{listing}
+
+    \end{itemize}
+    
+    \subsubsection{Symulacja projektu w programie Modelsim oraz jej wyniki}
+    Po ukończeniu kompilacji w programie Quartus Prime Lite można uruchomić symulację w programie Modelsim. Przygotowany został plik $fft\_simulation.do$, który automatycznie dodaje wszystkie niezbędne sygnały w celu analizy, diagnostyki projektu.
+
+    \begin{listing}[H]
+            \caption{Plik fft\_simulation.do - 1}
+            \label{lst:Plik fft_simulation.do - 1}
+	       \begin{minted}{do}
+# FFT Simulation DO File - Full Signal Waveform View
+restart -force
+vlib work
+vlog -sv fft_tb.sv
+vsim -voptargs=+acc fft_tb
+
+# Dodaj wszystkie sygnały z FFT
+add wave -divider "Top-Level Signals"
+add wave -dec /fft_tb/clk
+add wave -dec /fft_tb/reset
+add wave -dec /fft_tb/start
+add wave -dec /fft_tb/done
+
+add wave -divider "FFT Internal Signals"
+add wave -dec /fft_tb/fft_uut/state
+add wave -dec /fft_tb/fft_uut/addr_a
+add wave -dec /fft_tb/fft_uut/addr_b
+add wave -dec /fft_tb/fft_uut/rom_addr
+add wave -dec /fft_tb/fft_uut/tw_addr
+add wave -dec /fft_tb/fft_uut/we_a
+add wave -dec /fft_tb/fft_uut/we_b
+
+add wave -divider "RAM Interface A"
+add wave -dec /fft_tb/fft_uut/din_real_a
+add wave -dec /fft_tb/fft_uut/din_imag_a
+add wave -dec /fft_tb/fft_uut/dout_real_a
+add wave -dec /fft_tb/fft_uut/dout_imag_a
+\end{minted}
+	\end{listing}
+\begin{listing}[H]
+            \caption{Plik fft\_simulation.do - 2}
+            \label{lst:Plik fft_simulation.do - 2}
+	       \begin{minted}{do}
+add wave -divider "RAM Interface B"
+add wave -dec /fft_tb/fft_uut/din_real_b
+add wave -dec /fft_tb/fft_uut/din_imag_b
+add wave -dec /fft_tb/fft_uut/dout_real_b
+add wave -dec /fft_tb/fft_uut/dout_imag_b
+
+add wave -divider "Butterfly Signals"
+add wave -dec /fft_tb/fft_uut/bf_inst/xr
+add wave -dec /fft_tb/fft_uut/bf_inst/xi
+add wave -dec /fft_tb/fft_uut/bf_inst/yr
+add wave -dec /fft_tb/fft_uut/bf_inst/yi
+add wave -dec /fft_tb/fft_uut/bf_inst/wr
+add wave -dec /fft_tb/fft_uut/bf_inst/wi
+add wave -dec /fft_tb/fft_uut/bf_inst/out0_r
+add wave -dec /fft_tb/fft_uut/bf_inst/out0_i
+add wave -dec /fft_tb/fft_uut/bf_inst/out1_r
+add wave -dec /fft_tb/fft_uut/bf_inst/out1_i
+
+run -all
+                \end{minted}
+	\end{listing}
+
+    Jako wynik działania pliku .do (po zakończeniu symulacji) zostanie wyświetlone okno z przebiegami czasowymi sygnałów. Można zaobserwować zmiany stanów FSM - po uruchomieniu symulacji zostaje wysłany sygnał $reset$. Następnie $start$ - FSM przechodzi do stanu pierwszego, czyli $LOAD$:
+    \begin{figure}[H]
+		\centering
+		\includegraphics[scale = 0.7]{wave1.png}
+		\caption{Pierwszy stan FSM - LOAD}
+		\label{fig:Pierwszy stan FSM - LOAD}
+	\end{figure}
+    \newpage
+    W tym stanie dane (próbki) pobierane są z pamięci ROM i zapisywane do RAM dla późniejszych obliczeń. Ten stan trwa do momentu aż nie zostaną przeiterowane wszystkie zadeklarowane komórki ROM:
+    \begin{figure}[H]
+		\centering
+		\includegraphics[scale = 0.8]{wave2.png}
+		\caption{Następne stany FSM - obliczenia właściwe}
+		\label{fig:Następne stany FSM - obliczenia właściwe}
+	\end{figure}
+    Następnie rozpoczynają się obliczenia właściwe. Dane pobierane są z pamięci RAM, wykonywane są na nich operacje przy użyciu niezbędnych modułów i przetworzone dane wracają z powrotem do RAM. 
+    \newpage
+    Gdy przetworzone zostaną wszystkie dane przepisane z pamięci ROM do RAM, FSM wystawia stan wysoki na sygnale $done$ - następuje zrzut przetworzonych danych do pliku - zajmuje się tym testbench.
+    \begin{figure}[H]
+		\centering
+		\includegraphics[scale = 0.7]{wave3.png}
+		\caption{Działanie zakończone}
+		\label{fig:Działanie zakończone}
+	\end{figure}
+    
+    
+    Ponadto w lokalizacji, w której uruchamiana była symulacja, zostanie zapisany plik fft\_output.txt z wynikami działania FFT:
+
+    \begin{listing}[H]
+            \caption{Wynik działania FFT}
+            \label{lst:Wynik działania FFT}
+	       \begin{minted}[numbers=left]{do}
+     5      0
+   -41      4
+    32    -96
+   -14    -23
+   -85    -59
+    24    -19
+   -23     41
+   -13     50
+   111    -46
+    81    -15
+   -54    -35
+     2    -30
+   ...    ...
+                \end{minted}
+	\end{listing}
+    Takich wyników będzie 4096 (tyle ile próbek) i są one postaci $<czesc\_rzeczywista>$ $<czesc\_urojona>$. 
+
+    \newpage
+    \subsubsection{Analiza wyników uzyskanych z FFT w Verilog}
+    W celu wygenerowania widma z przetworzonych próbek sygnału napisany został kod w języku Python
+    \begin{listing}[H]
+           \caption{Kod generujący widmo z wyników FFT w Verilog - 1}
+            \label{lst:Kod generujący widmo z wyników FFT w Verilog - 1}
+	       \begin{minted}[numbers=left]{Python}
+import numpy as np
+import matplotlib.pyplot as plt
+from scipy.signal import find_peaks
+
+# Wczytanie danych z pliku
+data = np.loadtxt('fft_output.txt')
+
+# Podział na części rzeczywiste i urojone
+real_part = data[:, 0]
+imag_part = data[:, 1]
+
+# Obliczenie amplitud
+amplitudes = np.sqrt(real_part**2 + imag_part**2)
+
+# Normalizacja amplitud
+amplitudes = amplitudes / len(amplitudes)
+
+# Generowanie osi częstotliwości
+N = len(amplitudes)
+fs = 44100 
+frequencies = np.fft.fftfreq(N, 1/fs)
+
+# Wybór tylko częstotliwości dodatnich (prawa połowa)
+positive_freq = frequencies[:N//2]
+positive_amp = amplitudes[:N//2]
+
+# Wykrywanie pików
+peaks, _ = find_peaks(positive_amp, height=0.1*np.max(positive_amp), 
+                      distance=3)
+
+# Znajdowanie 5 najwyższych pików
+if len(peaks) > 0:
+    top_peaks_indices = np.argsort(positive_amp[peaks])[-5:][::-1]
+    top_peaks = peaks[top_peaks_indices]
+
+# Rysowanie widma
+plt.figure(figsize=(12, 6))
+plt.plot(positive_freq, positive_amp, label='Widmo')
+plt.scatter(positive_freq[peaks], positive_amp[peaks], 
+            color='red', label='Wszystkie piki')
+            \end{minted}
+	\end{listing}
+
+        \newpage
+        \begin{listing}[H]
+            \caption{Kod generujący widmo z wyników FFT w Verilog - 2}
+            \label{lst:Kod generujący widmo z wyników FFT w Verilog - 2}
+	       \begin{minted}[numbers=left]{Python}
+# Zaznaczanie i etykietowanie najwyższych pików
+if len(peaks) > 0:
+    for i, peak in enumerate(top_peaks):
+        plt.scatter(positive_freq[peak], positive_amp[peak], 
+                    color='green', s=100,
+                   label=f'Top {i+1}: {positive_freq[peak]:.3f} '
+                         f'Hz' if i == 0 else None)
+        plt.text(positive_freq[peak], positive_amp[peak],
+                f'{i+1}: {positive_freq[peak]:.3f} '
+                f'Hz\n{positive_amp[peak]:.3f}',
+                ha='center', va='bottom')
+
+plt.title('Widmo sygnału - częstotliwości dodatnie')
+plt.xlabel('Częstotliwość [Hz]')
+plt.ylabel('Znormalizowana amplituda')
+plt.grid(True)
+plt.legend()
+
+# Wyświetlanie informacji o pikach
+if len(peaks) > 0:
+    print("Znalezione piki na częstotliwościach:")
+    for i, peak in enumerate(top_peaks):
+        print(f"Top {i+1}: {positive_freq[peak]:.6f} Hz, "
+              f"amplituda: {positive_amp[peak]:.6f}")
+
+plt.show()
+                \end{minted}
+	\end{listing}
+
+    Wynikiem działania powyższego kodu jest obraz widma:
+    \begin{figure}[H]
+		\centering
+		\includegraphics[scale = 0.6]{widmo_sygnalu.png}
+		\caption{Widmo z wyników FFT}
+		\label{fig:Widmo z wyników FFT}
+	\end{figure}
+
+    \subsubsection{Porównanie widm wygenerowanych przy pomocy kodu referencyjnego z pliku .wav oraz widma po obliczeniu FFT przy pomocy Verilog}
+    Dla przypomnienia - tak wyglądało widmo sygnału signalNoise8.wav wygenerowane w rozdziale \ref{sss:Wynik działania finalnego kodu w języku Python}
+    \begin{figure}[H]
+		\centering
+		\includegraphics[scale = 0.6]{sn8python.png}
+		\caption{Widmo signalNoise8.wav - Python}
+		\label{fig:Widmo signalNoise8.wav - Python}
+	\end{figure}
+
+    Widmo utworzone z wyników FFT przeprowadzonej w kodzie Verilog na próbkach z pliku signalSample.txt praktycznie idealnie odwzorowuje widmo sygnału signalNoise8.wav. Pojawiły się tylko nieznaczne rozbieżności rzędu kilku herców, ponieważ w implementacji FFT w języku Verilog zastosowano reprezentację stałoprzecinkową (Q1.15). Język Python potrafi wykonać bez przeszkód obliczenia na liczbach zmiennoprzecinkowych. Ponadto tabela wartości współczynników twiddle ($e^{-j 2 \pi k / N}$) z Verilog została zapisana z pewnym przybliżeniem (normalnie występują tam wartości niewymierne). 
+    
+
+    
+        
+    \subsubsection{Zasoby niezbędne do działania projektu}
+    Poniższe wyniki zostały odczytane z raportu po kompilacji projektu i poszczególnych modułów.
+    \begin{figure}[H]
+		\centering
+		\includegraphics[scale = 0.6]{zasoby.png}
+		\caption{Zajęte zasoby - cały projekt}
+		\label{fig:Zajęte zasoby - cały projekt}
+	\end{figure}
+    \begin{figure}[H]
+		\centering
+		\includegraphics[scale = 0.6]{butterfly.png}
+		\caption{Zajęte zasoby - butterfly}
+		\label{fig:Zajęte zasoby - butterfly}
+	\end{figure}
+    \begin{figure}[H]
+		\centering
+		\includegraphics[scale = 0.6]{fft_4096.png}
+		\caption{Zajęte zasoby - fft}
+		\label{fig:Zajęte zasoby - fft}
+	\end{figure}
+    \begin{figure}[H]
+		\centering
+		\includegraphics[scale = 0.6]{ram_4096.png}
+		\caption{Zajęte zasoby - ram}
+		\label{fig:Zajęte zasoby - ram}
+	\end{figure}
+    \begin{figure}[H]
+		\centering
+		\includegraphics[scale = 0.6]{rom_input.png}
+		\caption{Zajęte zasoby - rom}
+		\label{fig:Zajęte zasoby - rom}
+	\end{figure}
+    Projekt, według kompilatora, zajmie zaledwie 128 bloków i 49 rejestrów co jest wynikiem bardzo dobrym. Stanowi to poniżej $1\%$ wszystkich dostępnych zasobów, pomimo że przeprowadzane obliczenia są dosyć skomplikowane i angażujące kilka odrębnych modułów.
+    \begin{figure}[H]
+		\centering
+		\includegraphics[scale = 0.6]{freq.png}
+		\caption{Maksymalna częstotliwość zegara - raport}
+		\label{fig:Maksymalna częstotliwość zegara - raport}
+	\end{figure}
+    Biorąc pod uwagę, że wbudowany zegar na płytce FPGA dostępnej w laboratorium taktuje z częstotliwością 50 MHz, prędkość działania kodu realizującego FFT jest zadowalająca - kod bez problemu działałby na pełnej prędkości zegara bez konieczności jego spowalniania (stosowania clock-divider'a) podczas fizycznej implementacji na płytce FPGA. Jednak, w celu udowodnienia poprawności fizycznej implementacji na płytce FPGA, zegar może zostać spowolniony w celu "sztucznego" spowolnienia prędkości działania projektu.
+	
+	%------------------------------------------------------------------------
+	\section{Uruchomienie}
+	\label{sec:uruchomienie}
+
+    Wyniki uruchomienia projektu zostały zaprezentowane w test\_bench'u.
+	
+	%------------------------------------------------------------------------
+	\newpage
+    \section{Podsumowanie}
+	\label{sec:podsumowanie}
+Projekt zakończył się pełnym sukcesem, realizując założony cel stworzenia systemu do analizy widma sygnału z łazika marsjańskiego. Wykorzystując metodę Design Thinking - Double Diamond, zespół przeszedł przez wszystkie etapy od analizy problemu po finalną implementację.
+
+\textbf{Kluczowe osiągnięcia:}
+
+\begin{itemize}
+    \item \textbf{Implementacja referencyjna w Pythonie} - stworzono funkcjonalny kod z własną implementacją FFT, wizualizacją wyników i obsługą plików .wav
+    \item \textbf{Pełna implementacja sprzętowa w Verilog} - zrealizowano 4096-punktową FFT z wykorzystaniem reprezentacji stałoprzecinkowej Q1.15
+    \item \textbf{Wysoką dokładność} - wyniki implementacji Verilog praktycznie idealnie odwzorowują kod referencyjny
+\end{itemize}
+
+\textbf{Weryfikacja i testowanie:}
+Przeprowadzono kompleksowe testy z wykorzystaniem MATLAB-a, analizatora widma online oraz symulacji ModelSim, potwierdzając poprawność działania na wszystkich etapach. System został przetestowany na rzeczywistych próbkach sygnału signalNoise8.wav.
+
+\subsection{Wnioski}
+
+\textbf{Metodologiczne:}
+\begin{itemize}
+    \item Etapowy proces rozwoju od prototypu programowego do implementacji sprzętowej pozwolił na wczesne wykrycie i eliminację błędów projektowych
+    \item Weryfikacja wieloetapowa (Python → MATLAB → Verilog) znacząco zwiększyła pewność poprawności rozwiązania
+\end{itemize}
+
+\textbf{Techniczne:}
+\begin{itemize}
+    \item Implementacja FFT bez wykorzystania IP Core jest możliwa i efektywna zasobowo, co daje pełną kontrolę nad algorytmem
+    \item Reprezentacja stałoprzecinkowa Q1.15 zapewnia wystarczającą dokładność dla większości zastosowań praktycznych przy znacznej oszczędności zasobów
+    \item Architektura z maszyną stanów (FSM) i dwuportową pamięcią RAM umożliwia efektywne przetwarzanie pipeline'owe
+\end{itemize}
+
+\textbf{Praktyczne:}
+\begin{itemize}
+    \item System jest skalowalny - można łatwo dostosować liczbę punktów FFT poprzez zmianę parametrów
+    \item Wysoka częstotliwość pracy pozwala na przetwarzanie sygnałów w czasie rzeczywistym
+\end{itemize}
+
+\textbf{Edukacyjne:}
+\begin{itemize}
+    \item Projekt pokazał praktyczne zastosowanie teorii transformaty Fouriera w systemach cyfrowych
+    \item Demonstrował różnice między implementacją programową a sprzętową oraz ich wpływ na dokładność obliczeń
+    \item Podkreślił znaczenie systematycznego testowania i weryfikacji w projektowaniu systemów cyfrowych
+\end{itemize}
+	
+	%------------------------------------------------------------------------
+	\newpage
+	\bibliographystyle{unsrt} % plplain plabbrv plalpha
+	\bibliography{SYCYF_proj_7}
+	
+\end{document}
