@@ -1,3 +1,4 @@
+`timescale 1ns/1ps
 module butterfly (
     input  signed [15:0] xr, xi,      // x0: część rzeczywista i urojona
     input  signed [15:0] yr, yi,      // x1: część rzeczywista i urojona
@@ -19,3 +20,4 @@ module butterfly (
     assign out1_r = xr - t_real;
     assign out1_i = xi - t_imag;
 endmodule
+

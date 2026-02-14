@@ -40,3 +40,4 @@ module ram_4096 (
         dout_imag_b <= mem[addr_b][15:0];
     end
 endmodule
+
