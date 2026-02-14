@@ -1,6 +1,5 @@
 .PHONY: all clean sim view analyze
 
-# Zmienne
 TOP_MODULE = fft_tb
 SRC_DIR = Verilog
 SOURCES = $(SRC_DIR)/butterfly.sv \
@@ -15,15 +14,10 @@ VCD_FILE = fft_tb.vcd
 
 all: sim
 
-# Kompilacja i uruchomienie z Iverilog
 sim:
-	@echo "Kompilacja z Iverilog..."
 	iverilog -g2012 -o $(SIM_OUT) $(SOURCES)
-	@echo "Uruchamianie symulacji..."
 	vvp $(SIM_OUT)
-	@echo "Symulacja zakończona. Wyniki w fft_output.txt"
 
-# Podgląd przebiegów w GTKWave
 view:
 	@if [ -f $(VCD_FILE) ]; then \
 		gtkwave $(VCD_FILE) & \
