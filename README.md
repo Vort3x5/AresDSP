@@ -216,9 +216,6 @@ make all
 make view
 ```
 
-<!-- ZRZUT EKRANU #5: Terminal output z make all -->
-![Kompilacja i uruchomienie](imgs/make_all.png)
-
 ---
 
 ### Dostępne komendy
