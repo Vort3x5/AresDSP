@@ -232,28 +232,7 @@ make clean    # Usuń pliki tymczasowe
 make help     # Pomoc
 ```
 
-### Analiza ręczna w GTKWave
-
-Po uruchomieniu `make view`, dodaj następujące sygnały do widoku:
-
-**Grupa 1: Sterowanie**
-- `clk`, `reset`, `start`, `done`
-
-**Grupa 2: Maszyna stanów**
-- `state`, `stage`, `group_count`, `k_count`
-
-**Grupa 3: Adresy i dane**
-- `addr_a`, `addr_b`, `tw_addr`
-- `bf_xr`, `bf_xi`, `bf_out0_r`, `bf_out0_i`
-
-**Ustawienia wyświetlania:**
-- `state`, `stage`: Decimal
-- Dane motyla: Signed Decimal
-- Adresy: Hex
-
----
-
-## 🔬 Algorytm FFT
+## Algorytm FFT
 
 ### Implementacja Radix-2 DIT
 
@@ -281,26 +260,26 @@ out1 = x - y · W_N^k
 ```
 IDLE (0)
   ↓ (start=1)
-LOAD (1) ────── Ładowanie danych z ROM do RAM (4096 cykli)
-  ↓            z bit-reversed addressing
-FFT_READ (2) ── Odczyt pary próbek dla motyla
+LOAD (1)
+  ↓            
+FFT_READ (2)
   ↓
-FFT_WAIT (3) ── Czekanie na RAM (1 cykl latencji)
+FFT_WAIT (3)
   ↓
-FFT_CALC1 (4) ─ Latch danych wejściowych
+FFT_CALC1 (4)
   ↓
-FFT_CALC2 (5) ─ Obliczenia motyla
+FFT_CALC2 (5)
   ↓
 FFT_WRITE (6) ─ Zapis wyników
   ↓ (następny motyl lub etap)
   └─────────────────┘
-  ↓ (wszystkie etapy zakończone)
+  ↓ 
 DONE_STATE (7)
 ```
 
 ---
 
-## 📐 Teoria Działania
+## Teoria Działania
 
 ### Format danych: Fixed-Point Q1.15
 
@@ -331,240 +310,4 @@ Dla N=4096 (12 bitów):
 addr_natural = 0b000000000001 (1)
 addr_reversed = 0b100000000000 (2048)
 ```
-
 ---
-
-## 🧪 Testy i Weryfikacja
-
-### Test 1: Sygnał sinusoidalny (1 kHz @ 44.1 kHz)
-
-```bash
-# Wygeneruj czysty sygnał testowy
-python3 scripts/generate_test_signal.py --freq 1000 --samples 4096 > data/test_1khz.txt
-
-# Zmień źródło w rom_input.sv i uruchom symulację
-make sim
-```
-
-**Oczekiwany rezultat:** Pik na częstotliwości ~1000 Hz
-
-### Test 2: Sygnał złożony (multi-tone)
-
-<!-- ZRZUT EKRANU #7: Porównanie widm dla różnych sygnałów testowych -->
-![Testy walidacyjne](docs/screenshots/validation_tests.png)
-
----
-
-## 🎓 Teoria Sygnałów
-
-### Twierdzenie o próbkowaniu (Nyquist-Shannon)
-
-Częstotliwość próbkowania `fs` musi być co najmniej dwukrotnie większa od maksymalnej częstotliwości w sygnale:
-
-```
-fs ≥ 2 · f_max
-```
-
-Dla `fs = 44100 Hz`:
-- Maksymalna wykrywalna częstotliwość: `22050 Hz`
-- Rozdzielczość częstotliwości: `fs/N = 44100/4096 ≈ 10.77 Hz/bin`
-
-### Okna czasowe
-
-Dla redukcji zjawiska leakage, można zastosować okno Hanninga:
-
-```python
-window = np.hanning(N)
-signal_windowed = signal * window
-```
-
-**Wady:** Zmniejszenie rozdzielczości częstotliwościowej  
-**Zalety:** Redukcja "przecieków" spektralnych
-
----
-
-## 📊 Benchmark
-
-| Parametr | Wartość |
-|----------|---------|
-| Rozmiar FFT | 4096 punktów |
-| Szerokość danych | 16-bit fixed-point |
-| Częstotliwość zegara | 50 MHz |
-| Liczba cykli | 126,976 |
-| Czas obliczeń | 2.54 ms |
-| Przepustowość | ~1.6M próbek/s |
-| Zajętość pamięci (RAM) | 32 KB (4096×32-bit) |
-| Zajętość pamięci (ROM) | ~48 KB (twiddle + input) |
-
-**Porównanie z implementacjami programowymi:**
-
-| Implementacja | Czas wykonania |
-|---------------|----------------|
-| **AresDSP (FPGA)** | **2.54 ms** |
-| NumPy FFT (CPU i7) | ~0.8 ms |
-| SciPy FFT (CPU i7) | ~0.9 ms |
-| FFTW (CPU i7) | ~0.6 ms |
-| Ręczna rekurencyjna | ~450 ms |
-
-*Uwaga: Implementacja FPGA ma przewagę w zastosowaniach real-time i niskim poborze mocy.*
-
----
-
-## 🐛 Rozwiązywanie Problemów
-
-### Problem: `make sim` kończy się błędem "Cannot find module"
-
-**Rozwiązanie:**
-```bash
-# Sprawdź czy wszystkie pliki istnieją
-ls -R hdl/
-
-# Upewnij się że ścieżki w Makefile są poprawne
-make clean
-make sim
-```
-
-### Problem: Brak pliku VCD po symulacji
-
-**Rozwiązanie:**
-Upewnij się, że w `hdl/tb/fft_tb.sv` dodano:
-```systemverilog
-initial begin
-    $dumpfile("sim/fft_tb.vcd");
-    $dumpvars(0, fft_tb);
-    // ...
-end
-```
-
-### Problem: Python zgłasza "ModuleNotFoundError: No module named 'numpy'"
-
-**Rozwiązanie:**
-```bash
-pip3 install numpy matplotlib scipy
-# lub dla NixOS:
-nix-shell
-```
-
----
-
-## 🤝 Wkład i Rozwój
-
-### Możliwe rozszerzenia
-
-- [ ] **FFT 8192/16384** - większa rozdzielczość częstotliwościowa
-- [ ] **Floating-point** - większa precyzja obliczeń
-- [ ] **Pipeline architecture** - wyższa przepustowość
-- [ ] **Xilinx/Intel IP cores** - integracja z narzędziami FPGA
-- [ ] **AXI-Stream interface** - standardowy interfejs danych
-- [ ] **Real-time audio input** - przetwarzanie na żywo
-
-### Zgłaszanie błędów
-
-Znalazłeś błąd? Otwórz [issue na GitHubie](https://github.com/Vort3x5/AresDSP/issues).
-
----
-
-## 📄 Licencja
-
-**MIT License**
-
-Copyright (c) 2026 Vort3x5
-
-Szczegóły w pliku [LICENSE](LICENSE).
-
----
-
-## 🙏 Podziękowania
-
-- **NASA** - za inspirację i dane misyjne
-- **Icarus Verilog Team** - za wspaniały open-source symulator
-- **Python Community** - za NumPy, SciPy i Matplotlib
-
----
-
-## 📚 Bibliografia
-
-1. Cooley, J. W., & Tukey, J. W. (1965). *An algorithm for the machine calculation of complex Fourier series*. Mathematics of Computation, 19(90), 297-301.
-2. Oppenheim, A. V., & Schafer, R. W. (2009). *Discrete-Time Signal Processing* (3rd ed.). Prentice Hall.
-3. Intel Corporation. (2023). *FPGA Memory Architecture*. Technical Documentation.
-4. IEEE Std 1800-2023. *SystemVerilog - Unified Hardware Design, Specification, and Verification Language*.
-
----
-
-## 👨‍🚀 Autor
-
-**Vort3x5**  
-GitHub: [@Vort3x5](https://github.com/Vort3x5)
-
-Projekt stworzony w ramach kursu DSP i projektowania systemów cyfrowych.
-
----
-
-<div align="center">
-
-**🛰️ Mars Rover, słyszymy Cię! 🛰️**
-
-[![GitHub stars](https://img.shields.io/github/stars/Vort3x5/AresDSP?style=social)](https://github.com/Vort3x5/AresDSP)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-
-</div>
-
----
-
-## 📸 Lista Zrzutów Ekranu do Zrobienia
-
-Stwórz folder `docs/screenshots/` i wykonaj następujące zrzuty ekranu:
-
-### 1. `spectrum_analysis.png`
-**Co:** Pełny wykres widma z wynikami analizy Python  
-**Jak:** Uruchom `make analyze`, zrób screenshot okna matplotlib  
-**Zawartość:** Wykres z niebieską linią widma i czerwonymi pikami z etykietami częstotliwości
-
-### 2. `terminal_make_all.png`
-**Co:** Output terminala podczas `make all`  
-**Jak:** Uruchom `make clean && make all`, zrób screenshot całego outputu  
-**Zawartość:** Linie z kompilacją, symulacją i wykrytymi częstotliwościami
-
-### 3. `gtkwave_control_signals.png`
-**Co:** Sygnały sterujące w GTKWave  
-**Jak:**
-```bash
-make view
-# W GTKWave dodaj: clk, reset, start, done, state
-# Pokaż zakres czasowy od 0 do ~500 ns (obejmujący LOAD)
-```
-**Zawartość:** 5 sygnałów w grupie, widoczne przejścia IDLE→LOAD→FFT
-
-### 4. `gtkwave_fft_stages.png`
-**Co:** Progresja przez etapy FFT  
-**Jak:**
-```bash
-# W GTKWave dodaj: stage, group_count, k_count, addr_a, addr_b
-# Zoom na zakres ~100-200 µs (środek obliczeń FFT)
-```
-**Zawartość:** Zmiana `stage` z 0→1→2, inkrementacja liczników
-
-### 5. `gtkwave_butterfly.png`
-**Co:** Szczegóły operacji butterfly  
-**Jak:**
-```bash
-# W GTKWave dodaj: bf_xr, bf_xi, bf_yr, bf_yi, bf_wr, bf_wi,
-#                   bf_out0_r, bf_out0_i, bf_out1_r, bf_out1_i
-# Format: Signed Decimal
-# Zoom na pojedynczą operację motyla (~5 cykli)
-```
-**Zawartość:** 10 sygnałów pokazujących wejścia i wyjścia motyla
-
-### 6. `validation_tests.png` (opcjonalnie)
-**Co:** Porównanie widm dla różnych sygnałów testowych  
-**Jak:** Stwórz subplot z 2-3 wykresami dla różnych częstotliwości testowych  
-**Zawartość:** Grid z wykresami pokazującymi poprawność detekcji pików
-
----
-
-**Porady do zrzutów GTKWave:**
-- Użyj **Data Format → Signed Decimal** dla danych motyla
-- Użyj **Data Format → Hex** dla adresów
-- Grupuj sygnały klikając prawym → `Insert Group`
-- Dostosuj kolory: prawym na sygnał → `Highlight`
-- Zapisz układ: `File → Write Save File` (jako `fft_complete.gtkw`)
