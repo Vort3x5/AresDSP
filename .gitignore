@@ -16,9 +16,9 @@
 *.png
 *.jpg
 *.jpeg
-!docs/*.png
-!docs/*.jpg
-!results/final_*.png  # Wyjątek dla finalnych wyników
+!imgs/*.png
+!imgs/*.jpg
+!results/final_*.png
 
 *.jou
 *.log
