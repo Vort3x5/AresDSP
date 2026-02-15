@@ -21,6 +21,8 @@ module fft_tb;
     always #10 clk = ~clk;
 
     initial begin
+		$dumpfile("fft_tb.vcd");
+		$dumpvars(0, fft_tb);
         // Reset i start
         clk = 0;
         reset = 1;
