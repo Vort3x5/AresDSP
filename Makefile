@@ -31,7 +31,7 @@ view:
 
 clean:
 	rm -f $(SIM_OUT) $(VCD_FILE) $(FFT_OUT)
-	rm -f results/*.png
+	rm -f results/*
 
 twiddle:
 	$(PYTHON) scripts/generate_twiddle.py > hdl/twiddle_rom.sv

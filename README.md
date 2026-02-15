@@ -28,9 +28,11 @@ na których odbywa się potencjalna transmisja.
 ### Wizualizacja widma
 
 <!-- ZRZUT EKRANU #1: Pełny wykres widma z zaznaczonymi pikami -->
-![Widmo sygnału marsjańskiego](docs/screenshots/spectrum_analysis.png)
+![Widmo sygnału marsjańskiego](imgs/widmo_sygnalu.png)
 
-**Opis wykresu:** Znormalizowane widmo amplitudowe sygnału z zaznaczonymi trzema dominującymi pikami częstotliwościowymi. Główna transmisja wykryta na częstotliwości ~2508 Hz.
+**Opis wykresu:** 
+Znormalizowane widmo amplitudowe sygnału z zaznaczonymi trzema dominującymi pikami częstotliwościowymi. 
+Główna transmisja wykryta na częstotliwości ~2508 Hz.
 
 ---
 
@@ -109,20 +111,20 @@ na których odbywa się potencjalna transmisja.
 
 ### Przebieg sygnałów sterujących
 
-<!-- ZRZUT EKRANU #3: GTKWave - sygnały sterujące (clk, reset, start, done, state) -->
-![Sygnały sterujące FSM](docs/screenshots/gtkwave_control_signals.png)
+<!-- ZRZUT EKRANU #2: GTKWave - sygnały sterujące (clk, reset, start, done, state) -->
+![Sygnały sterujące FSM](imgs/sterowanie_fsm.png)
 
 **Widoczne sygnały:**
 - `clk` - zegar systemowy (50 MHz)
 - `reset` - reset asynchroniczny
 - `start` - inicjalizacja obliczeń FFT
-- `done` - sygnał zakończenia (HIGH po ~126976 cyklach)
-- `state` - aktualny stan FSM (IDLE→LOAD→FFT_READ→...→DONE)
+- `done` - sygnał zakończenia
+- `state` - aktualny stan FSM
 
 ### Przejścia między etapami FFT
 
-<!-- ZRZUT EKRANU #4: GTKWave - zmiana stage, group_count, k_count -->
-![Progresja obliczeń FFT](docs/screenshots/gtkwave_fft_stages.png)
+<!-- ZRZUT EKRANU #3: GTKWave - zmiana stage, group_count, k_count -->
+![Progresja obliczeń FFT](imgs/fft_progres.png)
 
 **Widoczne sygnały:**
 - `stage` - aktualny etap FFT (0-11)
@@ -132,13 +134,13 @@ na których odbywa się potencjalna transmisja.
 
 ### Operacje motyla (butterfly)
 
-<!-- ZRZUT EKRANU #5: GTKWave - szczegóły operacji butterfly -->
-![Operacje motyla FFT](docs/screenshots/gtkwave_butterfly.png)
+<!-- ZRZUT EKRANU #4: GTKWave - szczegóły operacji butterfly -->
+![Operacje motyla FFT](imgs/butterfly.png)
 
 **Widoczne sygnały:**
 - `bf_xr`, `bf_xi` - wejście X (real, imag)
-- `bf_yr`, `bf_yi` - wejście Y (real, imag)
-- `bf_wr`, `bf_wi` - współczynnik twiddle (real, imag)
+- `bf_yr`, `bf_yi` - wejście Y
+- `bf_wr`, `bf_wi` - współczynnik twiddle
 - `bf_out0_r`, `bf_out0_i` - wyjście motyla 0
 - `bf_out1_r`, `bf_out1_i` - wyjście motyla 1
 
@@ -153,9 +155,7 @@ AresDSP/
 ├── Makefile                  
 ├── signalSample.txt      
 │
-├── docs/                     
-│   ├── SYCYF_description.txt 
-│   └── screenshots/          
+├── imgs/                     
 │
 ├── hdl/                      
 │   ├── butterfly.sv          
@@ -216,8 +216,8 @@ make all
 make view
 ```
 
-<!-- ZRZUT EKRANU #6: Terminal output z make all -->
-![Kompilacja i uruchomienie](docs/screenshots/terminal_make_all.png)
+<!-- ZRZUT EKRANU #5: Terminal output z make all -->
+![Kompilacja i uruchomienie](imgs/make_all.png)
 
 ---
 
@@ -277,37 +277,4 @@ FFT_WRITE (6) ─ Zapis wyników
 DONE_STATE (7)
 ```
 
----
-
-## Teoria Działania
-
-### Format danych: Fixed-Point Q1.15
-
-- **Zakres:** [-1.0, 1.0)
-- **Rozdzielczość:** 1/32768 ≈ 0.00003
-- **Reprezentacja:** 16-bit signed integer
-  - Bit 15: znak
-  - Bity 0-14: część ułamkowa
-
-**Przykład:**
-```
- 0.5  → 0x4000 (16384)
--0.5  → 0xC000 (-16384)
- 0.999 → 0x7FF8 (32760)
-```
-
-### Bit-Reversed Addressing
-
-Dla FFT Radix-2 DIT, dane wejściowe muszą być przestawione w kolejności bit-reversed:
-
-```
-Naturalna kolejność:  0, 1, 2, 3, 4, 5, 6, 7
-Bit-reversed (N=8):   0, 4, 2, 6, 1, 5, 3, 7
-```
-
-Dla N=4096 (12 bitów):
-```
-addr_natural = 0b000000000001 (1)
-addr_reversed = 0b100000000000 (2048)
-```
 ---
