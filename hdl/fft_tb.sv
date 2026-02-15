@@ -21,7 +21,7 @@ module fft_tb;
     always #10 clk = ~clk;
 
     initial begin
-		$dumpfile("fft_tb.vcd");
+		$dumpfile("sim/fft_tb.vcd");
 		$dumpvars(0, fft_tb);
         // Reset i start
         clk = 0;
@@ -39,7 +39,7 @@ module fft_tb;
         $display("FFT computation completed. Reading results...");
 
         // Otwórz plik wynikowy
-        outfile = $fopen("fft_output.txt", "w");
+        outfile = $fopen("sim/fft_output.txt", "w");
         if (!outfile) begin
             $display("Nie mogę otworzyć pliku wyjściowego!");
             $finish;
